@@ -27,8 +27,7 @@ class HomeScreenPageState extends State<HomeScreenPage>
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
             appBar: CustomAppBar(
                 height: 50.v,
                 leadingWidth: 56.h,
@@ -63,7 +62,7 @@ class HomeScreenPageState extends State<HomeScreenPage>
                             SizedBox(height: 34.v),
                             _buildRecentlyBookedList(context)
                           ])))
-                ])))));
+                ]))));
   }
 
   /// Section Widget

@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:travel_management_mobile/pages/home_screen_container_screen/home_screen_container_screen.dart';
 
 import '../components/custom_checkbox_button.dart';
 import '../components/custom_elevated_button.dart';
@@ -58,7 +57,7 @@ class LoginPage extends StatelessWidget {
                   _buildOrDivider(context),
                   SizedBox(height: 33.v),
                   _buildSocialMediaLogin(context),
-                  SizedBox(height: 49.v),
+                  SizedBox(height: 20.v),
                   Row(mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(padding: EdgeInsets.only(bottom: 1.v),

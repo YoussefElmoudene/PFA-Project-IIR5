@@ -7,9 +7,13 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
     }
 }
 
+plugins {
+    id 'com.google.gms.google-services' version '4.4.0' apply false
+}
 allprojects {
     repositories {
         google()

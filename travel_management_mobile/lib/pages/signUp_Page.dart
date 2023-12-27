@@ -53,9 +53,9 @@ class SignUpPage extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   style: theme.textTheme.displayMedium!
                                       .copyWith(height: 1.50)))),
-                      SizedBox(height: 20.v),
+                      SizedBox(height: 10.v),
                       _buildCreateAccountForm(context),
-                      SizedBox(height: 30.v),
+                      SizedBox(height: 10.v),
                       _buildOrDivider(context),
                       SizedBox(height: 10.v),
                       _buildSocial(context),

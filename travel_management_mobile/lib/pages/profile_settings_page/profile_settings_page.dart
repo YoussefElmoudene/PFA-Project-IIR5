@@ -26,8 +26,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
-    return SafeArea(
-        child: Scaffold(
+    return  Scaffold(
             appBar: _buildAppBar(context),
             body: Container(
                 width: double.maxFinite,
@@ -124,7 +123,7 @@ class ProfilePage extends StatelessWidget {
                                 style: CustomTextStyles.titleMediumRed400))
                       ]),
                       SizedBox(height: 5.v)
-                    ]))));
+                    ])));
   }
 
   /// Section Widget
