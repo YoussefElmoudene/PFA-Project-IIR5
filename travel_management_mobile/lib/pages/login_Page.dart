@@ -108,7 +108,9 @@ class _LoginPageState extends State<LoginPage> {
                                         style: theme.textTheme.titleSmall)))
                           ]),
                       SizedBox(height: 5.v)
-                    ]))));
+                    ]))
+        )
+    );
   }
 
   /// Section Widget
