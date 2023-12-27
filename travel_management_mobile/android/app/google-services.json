@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1063564734011",
+    "project_id": "travel-app-41225",
+    "storage_bucket": "travel-app-41225.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063564734011:android:5d830e42a54df29cfff61e",
+        "android_client_info": {
+          "package_name": "ma.emsi.travel_management_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyZXxh5kohPfVWEZRxlcxuSpaqJlkn5wQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
