@@ -132,7 +132,7 @@ class ProfilePage extends StatelessWidget {
         height: 50.v,
         leadingWidth: 56.h,
         leading: AppbarLeadingImage(
-            imagePath: ImageConstant.imgGoogle,
+            imagePath: ImageConstant.logo,
             margin: EdgeInsets.only(left: 24.h, top: 9.v, bottom: 9.v),
             onTap: () {
               onTapGoogle(context);
