@@ -5,7 +5,6 @@ import ma.emsi.travelmanagement.repository.UserRepository;
 import ma.emsi.travelmanagement.token.Token;
 import ma.emsi.travelmanagement.token.TokenRepository;
 import ma.emsi.travelmanagement.token.TokenType;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+import static ma.emsi.travelmanagement.entities.Role.Demandeur;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -31,13 +32,13 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
-                .firstName(request.getFirstname())
-                .lastName(request.getLastname())
-                .username(request.getUsername())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
                 .email(request.getEmail())
                 .tel(request.getTel())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole()).build();
+                .role(Demandeur).build();
+        System.out.println(user);
             var savedUser = repository.save(user);
             var jwtToken = jwtService.generateToken(user);
             var refreshToken = jwtService.generateRefreshToken(user);
@@ -56,8 +57,6 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
-
         // Convert the object to a JSON string
         String jsonString = String.valueOf(user.getRole());
         System.out.println(jsonString);
@@ -67,7 +66,7 @@ public class AuthenticationService {
     }
 
     private void saveUserToken(User user, String jwtToken) {
-        var token = Token.builder().user(user).token(jwtToken).tokenType(TokenType.TEST).expired(false).revoked(false).build();
+        var token = Token.builder().user(user).token(jwtToken).tokenType(TokenType.Bearer).expired(false).revoked(false).build();
         tokenRepository.save(token);
     }
 
@@ -85,7 +84,7 @@ public class AuthenticationService {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshToken;
         final String userEmail;
-        if (authHeader == null || !authHeader.startsWith("TEST")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer")) {
             return;
         }
         refreshToken = authHeader.substring(7);

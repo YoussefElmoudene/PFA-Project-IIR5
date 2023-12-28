@@ -1,6 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 
+
+class alertModel {
+    name: string;
+    message: string
+
+
+    constructor(name?: string, message?: string) {
+        this.name = name;
+        this.message = message;
+    }
+}
 @Injectable({providedIn: 'root'})
 export class FuseAlertService
 {
@@ -25,6 +36,10 @@ export class FuseAlertService
     {
         return this._onDismiss.asObservable();
     }
+
+
+
+
 
     /**
      * Getter for onShow
@@ -60,16 +75,23 @@ export class FuseAlertService
      *
      * @param name
      */
-    show(name: string): void
-    {
+    show(name: string, message: string, timeout?: number): void {
+        if (!timeout) {
+            timeout = 2000 // if not specific set timeout t0 1s
+        }
         // Return if the name is not provided
-        if ( !name )
-        {
+        if (!name) {
             return;
         }
-
         // Execute the observable
-        this._onShow.next(name);
+        // @ts-ignore
+        this._onShow.next(new alertModel(name, message));
+
+        //dismiss alert after 1s
+        const timer = setInterval(() => {
+            this.dismiss(name)
+            clearInterval(timer);
+        }, timeout);
     }
 
 }

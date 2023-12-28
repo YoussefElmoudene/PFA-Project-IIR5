@@ -11,11 +11,10 @@ import ma.emsi.travelmanagement.entities.Role;
 @NoArgsConstructor
 public class RegisterRequest {
 
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
     private Role role;
-    private String username;
     private String tel;
 }

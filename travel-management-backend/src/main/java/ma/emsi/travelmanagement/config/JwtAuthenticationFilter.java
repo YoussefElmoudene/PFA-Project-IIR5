@@ -45,11 +45,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         System.out.println(authHeader);
         final String jwt;
         final String userEmail;
-        if (authHeader == null ||!authHeader.startsWith("TEST")) {
+        if (authHeader == null ||!authHeader.startsWith("Bearer")) {
             filterChain.doFilter(request, response);
             return;
         }
-        jwt = authHeader.substring(5);
+        jwt = authHeader.substring(6);
         System.out.println(jwt);
         userEmail = jwtService.extractUsername(jwt);
         System.out.println("userEmail = " + userEmail);

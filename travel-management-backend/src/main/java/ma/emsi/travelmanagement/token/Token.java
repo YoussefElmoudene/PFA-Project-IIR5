@@ -19,7 +19,7 @@ public class Token {
     public String token;
 
     @Enumerated(EnumType.STRING)
-    public TokenType tokenType = TokenType.TEST;
+    public TokenType tokenType = TokenType.Bearer;
 
     public boolean revoked;
 
