@@ -33,7 +33,6 @@ class _SignUpPageState extends State<SignUpPage> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 
-
   onTapSignUp(BuildContext context) async {
     try {
       UserCredential userCredential =
@@ -260,10 +259,6 @@ class _SignUpPageState extends State<SignUpPage> {
     Navigator.pop(context);
   }
 
-  // /// Navigates to the fillProfileScreen when the action is triggered.
-  // onTapSignUp(BuildContext context) {
-  //   //  Navigator.pushNamed(context, AppRoutes.fillProfileScreen);
-  // }
 
   /// Navigates to the fillProfileScreen when the action is triggered.
   onTapTxtSignIn(BuildContext context) {
