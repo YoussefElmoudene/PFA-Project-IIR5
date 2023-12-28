@@ -18,12 +18,10 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id ;
-	
 	private String nom;
 	private String prenom;
 	private String identifiant;
 	private String mdp;
 	private String tel;
 	private String email;
-	
 }
