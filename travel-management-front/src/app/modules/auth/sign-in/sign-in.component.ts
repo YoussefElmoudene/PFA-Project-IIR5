@@ -84,7 +84,7 @@ export class AuthSignInComponent implements OnInit {
                     if (authority === Role.ROLE_ADMIN) {
                         location.href = '/admin/dashboard'
                     } else if (authority === Role.ROLE_DEMANDEUR) {
-                        location.href = '/home'
+                        location.href = '/demandeur/home'
                     } else {
                         this._authService.signOut();
                         // Re-enable the form
