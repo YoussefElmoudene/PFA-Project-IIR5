@@ -22,7 +22,6 @@ public class User implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id ;
-	
 	private String firstName;
 	private String lastName;
 	private String username;
@@ -65,7 +64,6 @@ public class User implements UserDetails {
 				"id=" + id +
 				", firstName='" + firstName + '\'' +
 				", lastName='" + lastName + '\'' +
-				", username='" + username + '\'' +
 				", password='" + password + '\'' +
 				", tel='" + tel + '\'' +
 				", email='" + email + '\'' +
