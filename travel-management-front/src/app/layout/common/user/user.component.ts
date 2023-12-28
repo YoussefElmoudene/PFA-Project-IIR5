@@ -7,8 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { UserService } from 'app/core/user/user.service';
-import { User } from 'app/core/user/user.types';
 import { Subject, takeUntil } from 'rxjs';
+import {User} from "../../../controller/model/user.model";
 
 @Component({
     selector       : 'user',
@@ -92,7 +92,6 @@ export class UserComponent implements OnInit, OnDestroy
         // Update the user
         this._userService.update({
             ...this.user,
-            status,
         }).subscribe();
     }
 

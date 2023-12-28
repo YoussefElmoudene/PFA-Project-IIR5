@@ -35,12 +35,22 @@
 
                 <!-- Name field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Full name</mat-label>
+                    <mat-label>First Name</mat-label>
                     <input
                         id="name"
                         matInput
-                        [formControlName]="'name'">
-                    <mat-error *ngIf="signUpForm.get('name').hasError('required')">
+                        [formControlName]="'firstname'">
+                    <mat-error *ngIf="signUpForm.get('firstname').hasError('required')">
+                        First name is required
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="w-full">
+                    <mat-label>Last Name</mat-label>
+                    <input
+                        id="name"
+                        matInput
+                        [formControlName]="'lastname'">
+                    <mat-error *ngIf="signUpForm.get('lastname').hasError('required')">
                         Full name is required
                     </mat-error>
                 </mat-form-field>
@@ -90,11 +100,11 @@
 
                 <!-- Company field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Company</mat-label>
+                    <mat-label>Telephone</mat-label>
                     <input
                         id="company-confirm"
                         matInput
-                        [formControlName]="'company'">
+                        [formControlName]="'tel'">
                 </mat-form-field>
 
                 <!-- ToS and PP -->

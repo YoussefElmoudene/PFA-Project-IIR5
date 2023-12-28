@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:travel_management_mobile/pages/home_screen_page/home_screen_page.dart';
 
 import '../components/custom_checkbox_button.dart';
 import '../components/custom_elevated_button.dart';
@@ -11,17 +11,54 @@ import '../routes/app_routes.dart';
 import '../theme/app_decoration.dart';
 import '../theme/custom_text_style.dart';
 import '../theme/theme_helper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({Key? key}) : super(key: key);
+import 'home_screen_container_screen/home_screen_container_screen.dart';
 
+
+class LoginPage extends StatefulWidget {
+   LoginPage({Key? key}) : super(key: key);
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+
+}
+
+class _LoginPageState extends State<LoginPage> {
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
-
   TextEditingController passwordController = TextEditingController();
-
   bool rememberme = false;
 
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  signInWithEmailAndPassword() async {
+    try {
+
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Login successful")),
+      );
+
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => HomeContainerScreen(),
+      ));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        return ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("No user found")),
+        );
+      } else {
+        return ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Wrong password or email")),
+        );
+      }
+    } catch (e) {
+      print('Unexpected error: $e');
+    }
+  }
 
   @override Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
@@ -34,44 +71,46 @@ class LoginPage extends StatelessWidget {
                     children: [
                       SizedBox(height: 70.v),
 
-                  CustomImageView(imagePath: ImageConstant.logo,
-                      height: 120.adaptSize,
-                      width: 120.adaptSize,
-                      alignment: Alignment.center,
-                      onTap: () {
-                        onTapImgArrowLeft(context);
-                      }),
-                  SizedBox(height: 50.v),
-                  Align(
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                          //width: 320.h,
-                          child: Text("Sign In",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.displayMedium!
-                                  .copyWith(height: 1.50)))),
-                  SizedBox(height: 21.v),
-                  _buildLoginForm(context),
-                  SizedBox(height: 57.v),
-                  _buildOrDivider(context),
-                  SizedBox(height: 33.v),
-                  _buildSocialMediaLogin(context),
-                  SizedBox(height: 20.v),
-                  Row(mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(padding: EdgeInsets.only(bottom: 1.v),
-                            child: Text("Don’t have an account?",
-                                style: CustomTextStyles.bodyMediumGray50_1)),
-                        GestureDetector(onTap: () {
-                          onTapTxtSignUp(context);
-                        },
-                            child: Padding(padding: EdgeInsets.only(left: 8.h),
-                                child: Text("Sign up",
-                                    style: theme.textTheme.titleSmall)))
-                      ]),
-                  SizedBox(height: 5.v)
-                ]))));
+                      CustomImageView(imagePath: ImageConstant.logo,
+                          height: 120.adaptSize,
+                          width: 120.adaptSize,
+                          alignment: Alignment.center,
+                          onTap: () {
+                            onTapImgArrowLeft(context);
+                          }),
+                      SizedBox(height: 50.v),
+                      Align(
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            //width: 320.h,
+                              child: Text("Sign In",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: theme.textTheme.displayMedium!
+                                      .copyWith(height: 1.50)))),
+                      SizedBox(height: 21.v),
+                      _buildLoginForm(context),
+                      SizedBox(height: 57.v),
+                      _buildOrDivider(context),
+                      SizedBox(height: 33.v),
+                      _buildSocialMediaLogin(context),
+                      SizedBox(height: 20.v),
+                      Row(mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(padding: EdgeInsets.only(bottom: 1.v),
+                                child: Text("Don’t have an account?",
+                                    style: CustomTextStyles.bodyMediumGray50_1)),
+                            GestureDetector(onTap: () {
+                              onTapTxtSignUp(context);
+                            },
+                                child: Padding(padding: EdgeInsets.only(left: 8.h),
+                                    child: Text("Sign up",
+                                        style: theme.textTheme.titleSmall)))
+                          ]),
+                      SizedBox(height: 5.v)
+                    ]))
+        )
+    );
   }
 
   /// Section Widget
@@ -117,7 +156,12 @@ class LoginPage extends StatelessWidget {
                 rememberme = value;
               }),
           SizedBox(height: 24.v),
-          CustomElevatedButton(text: "Sign In"),
+          CustomElevatedButton(
+            text: "Sign In",
+            onPressed: () async {
+              await signInWithEmailAndPassword();
+            },
+          ),
           SizedBox(height: 28.v),
           Align(alignment: Alignment.center, child: GestureDetector(onTap: () {
             onTapTxtForgotThePassword(context);
@@ -196,6 +240,8 @@ class LoginPage extends StatelessWidget {
 
   /// Navigates to the signUpBlankScreen when the action is triggered.
   onTapTxtSignUp(BuildContext context) {
-   Navigator.pushNamed(context, AppRoutes.signUpScreen);
+    Navigator.pushNamed(context, AppRoutes.signUpScreen);
   }
 }
+
+

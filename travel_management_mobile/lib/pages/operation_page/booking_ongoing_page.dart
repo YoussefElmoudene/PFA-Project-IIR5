@@ -32,10 +32,10 @@ class BookingOngoingPageState extends State<BookingOngoingPage>
             height: 50.v,
             leadingWidth: 56.h,
             leading: AppbarLeadingImage(
-                imagePath: ImageConstant.imgGoogle,
+                imagePath: ImageConstant.logo,
                 margin: EdgeInsets.only(left: 24.h, top: 9.v, bottom: 9.v)),
             title:
-            AppbarTitle(text: "Comfort", margin: EdgeInsets.only(left: 16.h)),
+            AppbarTitle(text: "Operations", margin: EdgeInsets.only(left: 16.h)),
             actions: [
               AppbarTrailingImage(
                   imagePath: ImageConstant.imgIcons,

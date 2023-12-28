@@ -11,6 +11,7 @@ import { Router, RouterLink } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
+import {User} from "../../../controller/model/user.model";
 
 @Component({
     selector     : 'auth-sign-up',
@@ -53,10 +54,11 @@ export class AuthSignUpComponent implements OnInit
     {
         // Create the form
         this.signUpForm = this._formBuilder.group({
-                name      : ['', Validators.required],
+                firstname      : ['', Validators.required],
+                lastname      : ['', Validators.required],
                 email     : ['', [Validators.required, Validators.email]],
                 password  : ['', Validators.required],
-                company   : [''],
+                tel   : [''],
                 agreements: ['', Validators.requiredTrue],
             },
         );
@@ -83,8 +85,16 @@ export class AuthSignUpComponent implements OnInit
         // Hide the alert
         this.showAlert = false;
 
+        let user :User = new User()
+        user.firstName=this.signUpForm.get('firstname').value;
+        user.lastName=this.signUpForm.get('lastname').value;
+        user.email=this.signUpForm.get('email').value;
+        user.password=this.signUpForm.get('password').value;
+        user.tel=this.signUpForm.get('tel').value;
+        console.log(user)
+
         // Sign up
-        this._authService.signUp(this.signUpForm.value)
+        this._authService.signUp(user)
             .subscribe(
                 (response) =>
                 {
