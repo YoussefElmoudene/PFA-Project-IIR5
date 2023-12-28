@@ -58,7 +58,7 @@ export class AuthUnlockSessionComponent implements OnInit
         // Get the user's name
         this._userService.user$.subscribe((user) =>
         {
-            this.name = user.name;
+            this.name = user.lastName + user?.firstName;
             this._email = user.email;
         });
 
