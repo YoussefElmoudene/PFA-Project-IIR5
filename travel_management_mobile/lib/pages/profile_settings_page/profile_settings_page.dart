@@ -146,7 +146,6 @@ class ProfilePage extends StatelessWidget {
         ]);
   }
 
-  /// Section Widget
   Widget _buildProfile(BuildContext context) {
     return Column(children: [
       SizedBox(
