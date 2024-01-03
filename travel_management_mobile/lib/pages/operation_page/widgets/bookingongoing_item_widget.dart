@@ -40,14 +40,14 @@ class BookingongoingItemWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CustomImageView(
-                  imagePath: ImageConstant.imgRectangle4100x100,
-                  height: 100.adaptSize,
-                  width: 100.adaptSize,
-                  radius: BorderRadius.circular(
-                    16.h,
-                  ),
-                ),
+                // CustomImageView(
+                //   imagePath: ImageConstant.imgRectangle4100x100,
+                //   height: 100.adaptSize,
+                //   width: 100.adaptSize,
+                //   radius: BorderRadius.circular(
+                //     16.h,
+                //   ),
+                // ),
                 Padding(
                   padding: EdgeInsets.only(
                     top: 5.v,
@@ -57,7 +57,7 @@ class BookingongoingItemWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Royale President Hotel",
+                        "Royale Ops",
                         style: CustomTextStyles.titleLargeSemiBold,
                       ),
                       SizedBox(height: 9.v),
@@ -87,7 +87,7 @@ class BookingongoingItemWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: CustomOutlinedButton(
-                  text: "Cancel Booking",
+                  text: "Cancel ",
                   margin: EdgeInsets.only(right: 6.h),
                   onPressed: () {
                     onTapBookingActionCancelBooking!.call();
@@ -97,7 +97,7 @@ class BookingongoingItemWidget extends StatelessWidget {
               Expanded(
                 child: CustomElevatedButton(
                   height: 38.v,
-                  text: "View Ticket",
+                  text: "View ",
                   margin: EdgeInsets.only(left: 6.h),
                   buttonStyle: CustomButtonStyles.fillPrimaryTL19,
                   buttonTextStyle: CustomTextStyles.titleMediumSemiBold,

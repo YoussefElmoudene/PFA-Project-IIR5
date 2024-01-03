@@ -58,7 +58,7 @@ class HomeScreenPageState extends State<HomeScreenPage>
                       child: Padding(
                           padding: EdgeInsets.only(left: 24.h),
                           child: Column(children: [
-                            _buildHotelsList(context),
+                            //_buildHotelsList(context),
                             SizedBox(height: 34.v),
                             _buildRecentlyBookedList(context)
                           ])))
@@ -87,7 +87,7 @@ class HomeScreenPageState extends State<HomeScreenPage>
           padding: EdgeInsets.only(right: 24.h),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text("Recently Booked", style: theme.textTheme.titleMedium),
+            Text("Recent Operations", style: theme.textTheme.titleMedium),
             GestureDetector(
                 onTap: () {
                   onTapTxtSeeAll(context);
