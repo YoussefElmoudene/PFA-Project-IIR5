@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class Demandes {
 	 private float frais;
 	 private Date dateDebut;
 	 private Date dateFin;
+	 @ManyToOne
 	 private Demandeur demandeur;
 	 private String moyenTransport;
 }
