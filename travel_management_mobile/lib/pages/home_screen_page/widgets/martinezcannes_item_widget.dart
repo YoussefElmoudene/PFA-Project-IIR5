@@ -17,29 +17,29 @@ class MartinezcannesItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 18.v),
+      padding: EdgeInsets.symmetric(vertical: 18.v,horizontal: 18.v),
       decoration: AppDecoration.outlineBlackC.copyWith(
         borderRadius: BorderRadiusStyle.roundedBorder16,
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          CustomImageView(
-            imagePath: ImageConstant.imgRectangle4,
-            height: 100.adaptSize,
-            width: 100.adaptSize,
-            radius: BorderRadius.circular(
-              16.h,
-            ),
-            margin: EdgeInsets.symmetric(vertical: 1.v),
-          ),
+          // CustomImageView(
+          //   imagePath: ImageConstant.imgRectangle4,
+          //   height: 100.adaptSize,
+          //   width: 100.adaptSize,
+          //   radius: BorderRadius.circular(
+          //     16.h,
+          //   ),
+          //   margin: EdgeInsets.symmetric(vertical: 1.v),
+          // ),
           Padding(
             padding: EdgeInsets.only(bottom: 11.v),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Martinez Cannes",
+                  "Operation",
                   style: theme.textTheme.titleLarge,
                 ),
                 SizedBox(height: 18.v),

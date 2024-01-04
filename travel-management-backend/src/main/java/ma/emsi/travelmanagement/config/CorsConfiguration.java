@@ -1,4 +1,5 @@
-package com.example.stageinnov.config;
+package ma.emsi.travelmanagement.config;
+
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

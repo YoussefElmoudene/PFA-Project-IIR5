@@ -19,6 +19,7 @@ public class Demandeur extends User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-
+	@OneToMany(mappedBy = "demandeur", cascade = CascadeType.ALL)
+	private List<Demandes> demandes;
 
 }
