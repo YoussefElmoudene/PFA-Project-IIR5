@@ -23,7 +23,14 @@ export const compactNavigation: FuseNavigationItem[] = [
         title: 'Home',
         type: 'basic',
         icon: 'heroicons_outline:chart-pie',
-        link: '/home'
+        link: '/demandeur/home'
+    },
+    {
+        id: 'demandes',
+        title: 'Demandes',
+        type: 'basic',
+        icon: 'heroicons_outline:chart-pie',
+        link: '/demandeur/demandes'
     }
 ];
 export const futuristicNavigation: FuseNavigationItem[] = [
@@ -32,7 +39,14 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         title: 'Home',
         type: 'basic',
         icon: 'heroicons_outline:chart-pie',
-        link: '/home'
+        link: '/demandeur/home'
+    },
+    {
+        id: 'demandes',
+        title: 'Demandes',
+        type: 'basic',
+        icon: 'heroicons_outline:chart-pie',
+        link: '/demandeur/demandes'
     }
 ];
 export const horizontalNavigation: FuseNavigationItem[] = [
@@ -41,6 +55,13 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         title: 'Home',
         type: 'basic',
         icon: 'heroicons_outline:chart-pie',
-        link: '/home'
+        link: '/demandeur/home'
+    },
+    {
+        id: 'demandes',
+        title: 'Demandes',
+        type: 'basic',
+        icon: 'heroicons_outline:chart-pie',
+        link: '/demandeur/demandes'
     }
 ];
