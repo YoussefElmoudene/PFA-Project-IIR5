@@ -1,6 +1,6 @@
 package ma.emsi.travelmanagement.controller;
 
-import ma.emsi.travelmanagement.entities.Demandes;
+import ma.emsi.travelmanagement.entities.Demande;
 import ma.emsi.travelmanagement.services.DemandesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,26 +17,26 @@ public class DemandesController {
 	private DemandesService demandesService;
 
 	@GetMapping("/all")
-	public ResponseEntity<List<Demandes>> getAllDemandes() {
-		List<Demandes> demandesList = demandesService.getAllDemandes();
+	public ResponseEntity<List<Demande>> getAllDemandes() {
+		List<Demande> demandesList = demandesService.getAllDemandes();
 		return new ResponseEntity<>(demandesList, HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Demandes> getDemandesById(@PathVariable int id) {
+	public ResponseEntity<Demande> getDemandesById(@PathVariable int id) {
 		return demandesService.getDemandesById(id).map(demandes -> new ResponseEntity<>(demandes, HttpStatus.OK))
 				.orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<Demandes> createDemandes(@RequestBody Demandes demandes) {
-		Demandes createdDemandes = demandesService.createDemandes(demandes);
+	public ResponseEntity<Demande> createDemandes(@RequestBody Demande demandes) {
+		Demande createdDemandes = demandesService.createDemandes(demandes);
 		return new ResponseEntity<>(createdDemandes, HttpStatus.CREATED);
 	}
 
 	@PutMapping("update/{id}")
-	public ResponseEntity<Demandes> updateDemandes(@PathVariable int id, @RequestBody Demandes updatedDemandes) {
-		Demandes updatedEntity = demandesService.updateDemandes(id, updatedDemandes);
+	public ResponseEntity<Demande> updateDemandes(@PathVariable int id, @RequestBody Demande updatedDemandes) {
+		Demande updatedEntity = demandesService.updateDemandes(id, updatedDemandes);
 		return updatedEntity != null ? new ResponseEntity<>(updatedEntity, HttpStatus.OK)
 				: new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}

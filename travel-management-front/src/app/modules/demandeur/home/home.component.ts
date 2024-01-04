@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatIconModule} from "@angular/material/icon";
 import {CdkScrollable} from "@angular/cdk/overlay";
 import {MatFormFieldModule} from "@angular/material/form-field";
@@ -13,6 +13,10 @@ import {MatButtonModule} from "@angular/material/button";
 import {RouterLink} from "@angular/router";
 import {FuseFindByKeyPipe} from "../../../../@fuse/pipes/find-by-key";
 import {FormsModule} from "@angular/forms";
+import {MatDialog} from "@angular/material/dialog";
+import {CreateDemandeComponent} from "./create-demande/create-demande.component";
+import {DemandeService} from "../../../controller/service/demande.service";
+import {Demande} from "../../../controller/model/demande.model";
 
 @Component({
     selector: 'app-home',
@@ -23,12 +27,35 @@ import {FormsModule} from "@angular/forms";
         MatSlideToggleModule, NgIf, NgClass, MatTooltipModule,
         MatProgressBarModule, MatButtonModule, RouterLink,
         FuseFindByKeyPipe, PercentPipe, I18nPluralPipe, FormsModule, DatePipe],
-
-    styleUrls: ['./home.component.scss']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
     startTime = new Date()
     endTime = new Date()
-    constructor() {
+
+    constructor(public dialog: MatDialog,
+                private demandeService: DemandeService) {
+    }
+
+
+    get demandes(): Array<Demande> {
+        return this.demandeService.demandes;
+    }
+
+    set demandes(value: Array<Demande>) {
+        this.demandeService.demandes = value;
+    }
+
+    ngOnInit() {
+        this.demandeService.findAll().subscribe(res => {
+            this.demandes = res
+        })
+    }
+
+    openCreate() {
+        const dialogRef = this.dialog.open(CreateDemandeComponent);
+
+        dialogRef.afterClosed().subscribe(result => {
+
+        });
     }
 }
