@@ -11,8 +11,11 @@ import '../../components/app_bar/custom_app_bar.dart';
 import '../../components/custom_elevated_button.dart';
 import '../../components/custom_image_view.dart';
 import '../../core/utils/image_constant.dart';
+import '../../model/demande_model.dart';
+import '../../service/firebaseService.dart';
 import '../../theme/app_decoration.dart';
 import '../../theme/custom_button_style.dart';
+import '../../toasts/toast_notifications.dart';
 
 class HomeScreenPage extends StatefulWidget {
   const HomeScreenPage({Key? key}) : super(key: key);
@@ -21,14 +24,13 @@ class HomeScreenPage extends StatefulWidget {
   HomeScreenPageState createState() => HomeScreenPageState();
 }
 
-class HomeScreenPageState extends State<HomeScreenPage>
-    with AutomaticKeepAliveClientMixin<HomeScreenPage> {
+class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveClientMixin<HomeScreenPage> {
+
   @override
   bool get wantKeepAlive => true;
   final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
+  final FirebaseService _firebaseService = FirebaseService();
   TextEditingController dateStartController = TextEditingController();
   TextEditingController dateEndController = TextEditingController();
   TextEditingController amountController = TextEditingController();
@@ -97,7 +99,6 @@ class HomeScreenPageState extends State<HomeScreenPage>
   }
 
 
-
   Widget _buildRecentlyBookedList(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,10 +106,14 @@ class HomeScreenPageState extends State<HomeScreenPage>
         Padding(
           padding: EdgeInsets.only(right: 24.h),
           child: StreamBuilder<QuerySnapshot>(
-            stream: _firestore.collection('demandes').snapshots(),
+            stream: _firebaseService.getDemandesStream(),
             builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return CircularProgressIndicator(); // Loading indicator
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              }
+
+              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return Text("No demandes available.");
               }
 
               List<QueryDocumentSnapshot> demandes = snapshot.data!.docs;
@@ -130,6 +135,7 @@ class HomeScreenPageState extends State<HomeScreenPage>
       ],
     );
   }
+
 
   Widget _buildDemandeItem(
       BuildContext context, QueryDocumentSnapshot demande) {
@@ -210,16 +216,29 @@ class HomeScreenPageState extends State<HomeScreenPage>
                   style: theme.textTheme.labelMedium,
                 ),
                 SizedBox(height: 16.v),
-                Center(
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.teal,
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.edit,
+                        color: Colors.blue,
+                      ),
+                      onPressed: () {
+                        _showUpdateDemandeModal(context, demande);
+                      },
                     ),
-                    onPressed: () {
-                      _deleteDemande(demande);
-                    },
-                  ),
+                    SizedBox(width: 8.h),
+                    IconButton(
+                      icon: Icon(
+                        Icons.delete,
+                        color: Colors.teal,
+                      ),
+                      onPressed: () {
+                        _firebaseService.deleteDemande(demande);
+                        ToastUtils.showErrorToast(context, 'Done', 'Item Deleted Successfully');
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -229,11 +248,10 @@ class HomeScreenPageState extends State<HomeScreenPage>
     );
   }
 
-  void _deleteDemande(QueryDocumentSnapshot demande) async {
-    await _firestore.collection('demandes').doc(demande.id).delete();
-  }
+  // void _deleteDemande(QueryDocumentSnapshot demande) async {
+  //   await _firestore.collection('demandes').doc(demande.id).delete();
+  // }
 
-  onTapTxtSeeAll(BuildContext context) {}
 
   void _showAddDemandeModal(BuildContext context) {
     showModalBottomSheet(
@@ -323,19 +341,178 @@ class HomeScreenPageState extends State<HomeScreenPage>
     );
   }
 
+  void _clearInputs() {
+    dateStartController.clear();
+    dateEndController.clear();
+    amountController.clear();
+    cityController.clear();
+    vehicleController.clear();
+  }
+
+  bool _validateInputs() {
+    return dateStartController.text.isNotEmpty &&
+        dateEndController.text.isNotEmpty &&
+        amountController.text.isNotEmpty &&
+        cityController.text.isNotEmpty &&
+        vehicleController.text.isNotEmpty;
+  }
+
   void _addDemandeToFirestore(BuildContext context) async {
     try {
-      await _firestore.collection('demandes').add({
-        'dateStart': dateStartController.text,
-        'dateEnd': dateEndController.text,
-        'amount': amountController.text,
-        'city': cityController.text,
-        'vehicle': vehicleController.text,
-      });
+      if (_validateInputs()) {
+        Demande newDemande = Demande(
+          dateStart: dateStartController.text,
+          dateEnd: dateEndController.text,
+          amount: amountController.text,
+          city: cityController.text,
+          vehicle: vehicleController.text,
+        );
 
-      Navigator.pop(context);
+        await _firebaseService.addDemande(newDemande);
+        Navigator.pop(context);
+        ToastUtils.showSuccessToast(context, 'Done', 'Item Added Successfully');
+        _clearInputs();
+      } else {
+        ToastUtils.showErrorToast(context, 'Error', 'Please fill in all required fields.');
+      }
     } catch (e) {
       print('Error adding demande: $e');
+      ToastUtils.showErrorToast(context, 'Error', 'Failed to add item. Please try again.');
     }
   }
+
+
+  void _showUpdateDemandeModal(BuildContext context, QueryDocumentSnapshot demande) {
+    String dateStart = demande['dateStart'] ?? '';
+    String dateEnd = demande['dateEnd'] ?? '';
+    String amount = demande['amount'] ?? '';
+    String city = demande['city'] ?? '';
+    String vehicle = demande['vehicle'] ?? '';
+
+    dateStartController.text = dateStart;
+    dateEndController.text = dateEnd;
+    amountController.text = amount;
+    cityController.text = city;
+    vehicleController.text = vehicle;
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return _buildUpdateDemandeForm(context, demande);
+      },
+    );
+  }
+
+  Widget _buildUpdateDemandeForm(BuildContext context, QueryDocumentSnapshot demande) {
+    String documentId = demande.id;
+
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Form(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                readOnly: true,
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101),
+                  );
+
+                  if (pickedDate != null) {
+                    setState(() {
+                      dateStartController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+                    });
+                  }
+                },
+                controller: dateStartController,
+                style: TextStyle(color: Colors.black),
+                decoration: InputDecoration(labelText: 'Date Start'),
+              ),
+              TextFormField(
+                readOnly: true,
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101),
+                  );
+
+                  if (pickedDate != null) {
+                    setState(() {
+                      dateEndController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+                    });
+                  }
+                },
+                controller: dateEndController,
+                style: TextStyle(color: Colors.black),
+                decoration: InputDecoration(labelText: 'Date End'),
+              ),
+              TextFormField(
+                controller: amountController,
+                style: TextStyle(color: Colors.black),
+                decoration: InputDecoration(labelText: 'Amount'),
+                keyboardType: TextInputType.number,
+              ),
+              TextFormField(
+                controller: cityController,
+                style: TextStyle(color: Colors.black),
+                decoration: InputDecoration(labelText: 'City'),
+              ),
+              TextFormField(
+                controller: vehicleController,
+                style: TextStyle(color: Colors.black),
+                decoration: InputDecoration(labelText: 'Vehicle'),
+              ),
+              SizedBox(height: 16.0),
+              Center(
+                child: CustomElevatedButton(
+                  height: 38.v,
+                  text: "Update",
+                  margin: EdgeInsets.only(left: 6.h),
+                  buttonStyle: CustomButtonStyles.fillPrimaryTL19,
+                  buttonTextStyle: CustomTextStyles.titleMediumSemiBold,
+                  onPressed: () {
+                    _updateDemandeInFirestore(context, documentId);
+                  },
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _updateDemandeInFirestore(BuildContext context, String documentId) async {
+    try {
+      if (_validateInputs()) {
+        Demande updatedDemande = Demande(
+          dateStart: dateStartController.text,
+          dateEnd: dateEndController.text,
+          amount: amountController.text,
+          city: cityController.text,
+          vehicle: vehicleController.text,
+        );
+
+        await _firebaseService.updateDemande(documentId, updatedDemande);
+        Navigator.pop(context);
+        ToastUtils.showUpdateToast(context, 'Done', 'Item updated Successfully');
+        _clearInputs();
+      } else {
+        ToastUtils.showErrorToast(
+            context, 'Error', 'Please fill in all required fields.');
+      }
+    } catch (e) {
+      print('Error updating demande: $e');
+      ToastUtils.showErrorToast(
+          context, 'Error', 'Failed to update item. Please try again.');
+    }
+  }
+
 }
