@@ -38,4 +38,21 @@ class FirebaseService {
     await _firestore.collection('demandes').doc(demande.id).delete();
 
   }
+  Future<List<QueryDocumentSnapshot>> searchDemandes(String searchTerm) async {
+    QuerySnapshot snapshot = await _firestore.collection('demandes').get();
+
+    List<QueryDocumentSnapshot> filteredDemandes = snapshot.docs.where((demande) {
+      String city = demande['city'] ?? '';
+      String date = demande['dateStart'] ?? '';
+      String vehicle = demande['vehicle'] ?? '';
+      String price = demande['price'] ?? '';
+
+      return city.contains(searchTerm) ||
+          date.contains(searchTerm) ||price.contains(searchTerm)||
+          vehicle.contains(searchTerm);
+    }).toList();
+
+    return filteredDemandes;
+  }
+
 }

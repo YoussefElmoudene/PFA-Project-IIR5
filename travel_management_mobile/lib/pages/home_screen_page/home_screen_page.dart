@@ -8,8 +8,11 @@ import '../../components/app_bar/appbar_leading_image.dart';
 import '../../components/app_bar/appbar_title.dart';
 import '../../components/app_bar/appbar_trailing_image.dart';
 import '../../components/app_bar/custom_app_bar.dart';
+import '../../components/app_icons.dart';
 import '../../components/custom_elevated_button.dart';
 import '../../components/custom_image_view.dart';
+import '../../components/custom_outlined_button.dart';
+import '../../components/custom_search_view.dart';
 import '../../core/utils/image_constant.dart';
 import '../../model/demande_model.dart';
 import '../../service/firebaseService.dart';
@@ -24,8 +27,8 @@ class HomeScreenPage extends StatefulWidget {
   HomeScreenPageState createState() => HomeScreenPageState();
 }
 
-class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveClientMixin<HomeScreenPage> {
-
+class HomeScreenPageState extends State<HomeScreenPage>
+    with AutomaticKeepAliveClientMixin<HomeScreenPage> {
   @override
   bool get wantKeepAlive => true;
   final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
@@ -37,6 +40,7 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
   TextEditingController cityController = TextEditingController();
   TextEditingController vehicleController = TextEditingController();
   TextEditingController motifController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -77,11 +81,7 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
                 child: Padding(
                   padding: EdgeInsets.only(left: 24.h),
                   child: Column(
-                    children: [
-                      //_buildHotelsList(context),
-                      SizedBox(height: 34.v),
-                      _buildRecentlyBookedList(context)
-                    ],
+                    children: [_buildRecentlyBookedList(context)],
                   ),
                 ),
               ),
@@ -89,31 +89,60 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: CustomOutlinedButton(
         onPressed: () {
           _showAddDemandeModal(context);
         },
-        child: Icon(Icons.add),
+        height: 60.v,
+        width: 60.h,
+        text: "+",
+        buttonTextStyle: CustomTextStyles.titleLargeSemiBold,
+
       ),
     );
   }
-
 
   Widget _buildRecentlyBookedList(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(
+            width: double.maxFinite,
+            child: Column(children: [
+              SizedBox(height: 20.v),
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                      padding: EdgeInsets.only(right: 24.h),
+                      child: Text("Hello, Badr 👋",
+                          style: theme.textTheme.headlineLarge)))
+            ])),
+        SizedBox(height: 40.v),
+        Padding(
+            padding: EdgeInsets.only(right: 24.h),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Recent Demands", style: theme.textTheme.titleMedium),
+                  GestureDetector(
+                      onTap: () {
+                        // onTapTxtSeeAll(context);
+                      },
+                      child: Text("See All",
+                          style: CustomTextStyles.titleMediumPrimary16))
+                ])),
+        SizedBox(height: 16.v),
         Padding(
           padding: EdgeInsets.only(right: 24.h),
           child: StreamBuilder<QuerySnapshot>(
             stream: _firebaseService.getDemandesStream(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return LinearProgressIndicator();
               }
 
               if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                return Text("No demandes available.");
+                return Text("No demands available.");
               }
 
               List<QueryDocumentSnapshot> demandes = snapshot.data!.docs;
@@ -136,7 +165,6 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
     );
   }
 
-
   Widget _buildDemandeItem(
       BuildContext context, QueryDocumentSnapshot demande) {
     String dateStart = demande['dateStart'] ?? '';
@@ -144,53 +172,37 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
     String amount = demande['amount'] ?? '';
     String city = demande['city'] ?? '';
     String vehicle = demande['vehicle'] ?? '';
-
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 18.v, horizontal: 18.v),
+      padding: EdgeInsets.all(10.h),
       decoration: AppDecoration.outlineBlackC.copyWith(
         borderRadius: BorderRadiusStyle.roundedBorder16,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: 11.v),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            padding: EdgeInsets.only(right: 8.h),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   " $dateStart - $dateEnd",
                   style: theme.textTheme.titleLarge,
                 ),
-                SizedBox(height: 18.v),
-                Text(
-                  "city :$city",
-                  style: theme.textTheme.bodyMedium,
-                ),
                 SizedBox(height: 12.v),
                 Row(
                   children: [
                     CustomImageView(
-                      imagePath: ImageConstant.imgCalendar,
-                      height: 12.adaptSize,
-                      width: 12.adaptSize,
+                      imagePath: AppIcons.imgMoney,
+                      height: 20.adaptSize,
+                      width: 20.adaptSize,
                       margin: EdgeInsets.symmetric(vertical: 2.v),
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 4.h),
                       child: Text(
-                        "Vehicle: $vehicle",
-                        style: theme.textTheme.titleSmall,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: 8.h,
-                        top: 1.v,
-                      ),
-                      child: Text(
-                        "",
-                        style: theme.textTheme.bodySmall,
+                        "$amount Dh",
+                        style: CustomTextStyles.headlineSmallPrimary,
                       ),
                     ),
                   ],
@@ -198,50 +210,101 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
               ],
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-              top: 10.v,
-              bottom: 8.v,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  "$amount Dh",
-                  style: CustomTextStyles.headlineSmallPrimary,
-                ),
-                SizedBox(height: 2.v),
-                Text(
-                  "",
-                  style: theme.textTheme.labelMedium,
-                ),
-                SizedBox(height: 16.v),
-                Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.edit,
-                        color: Colors.blue,
-                      ),
-                      onPressed: () {
-                        _showUpdateDemandeModal(context, demande);
-                      },
+          SizedBox(height: 10.v),
+
+          Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 4.0),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: 4.h),
+                          child: Text(
+                            "City : $city",
+                            style: theme.textTheme.titleSmall,
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(width: 8.h),
-                    IconButton(
-                      icon: Icon(
-                        Icons.delete,
-                        color: Colors.teal,
-                      ),
-                      onPressed: () {
-                        _firebaseService.deleteDemande(demande);
-                        ToastUtils.showErrorToast(context, 'Done', 'Item Deleted Successfully');
-                      },
+                  ),
+                ],
+              ),
+
+          SizedBox(height: 10.v),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // Align children at the start and end
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    // Add left padding to the vehicle section
+                    child: Row(
+                      children: [
+                        CustomImageView(
+                          imagePath: AppIcons.imgCar,
+                          height: 20.adaptSize,
+                          width: 20.adaptSize,
+                          margin: EdgeInsets.symmetric(vertical: 2.v),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 4.h),
+                          child: Text(
+                            " : $vehicle",
+                            style: theme.textTheme.titleSmall,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(right: 8.0),
+                child: CustomElevatedButton(
+                  height: 24.v,
+                  width: 60.h,
+                  text: "Status",
+                  buttonStyle: CustomButtonStyles.fillTeal,
+                  buttonTextStyle: CustomTextStyles.labelMediumCyan300,
                 ),
-              ],
-            ),
+              )
+            ],
+          ),
+          SizedBox(height: 19.v),
+          Divider(),
+          SizedBox(height: 19.v),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: CustomOutlinedButton(
+                  text: "Delete",
+                  margin: EdgeInsets.only(right: 6.h),
+                  onPressed: () {
+                    _firebaseService.deleteDemande(demande);
+                    ToastUtils.showErrorToast(
+                        context, 'Done', 'Item Deleted Successfully');
+                  },
+                ),
+              ),
+              Expanded(
+                child: CustomElevatedButton(
+                  height: 38.v,
+                  text: "Update",
+                  margin: EdgeInsets.only(left: 6.h),
+                  buttonStyle: CustomButtonStyles.fillPrimaryTL19,
+                  buttonTextStyle: CustomTextStyles.titleMediumSemiBold,
+                  onPressed: () {
+                    _showUpdateDemandeModal(context, demande);
+                  },
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -251,7 +314,6 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
   // void _deleteDemande(QueryDocumentSnapshot demande) async {
   //   await _firestore.collection('demandes').doc(demande.id).delete();
   // }
-
 
   void _showAddDemandeModal(BuildContext context) {
     showModalBottomSheet(
@@ -373,16 +435,18 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
         ToastUtils.showSuccessToast(context, 'Done', 'Item Added Successfully');
         _clearInputs();
       } else {
-        ToastUtils.showErrorToast(context, 'Error', 'Please fill in all required fields.');
+        ToastUtils.showErrorToast(
+            context, 'Error', 'Please fill in all required fields.');
       }
     } catch (e) {
       print('Error adding demande: $e');
-      ToastUtils.showErrorToast(context, 'Error', 'Failed to add item. Please try again.');
+      ToastUtils.showErrorToast(
+          context, 'Error', 'Failed to add item. Please try again.');
     }
   }
 
-
-  void _showUpdateDemandeModal(BuildContext context, QueryDocumentSnapshot demande) {
+  void _showUpdateDemandeModal(
+      BuildContext context, QueryDocumentSnapshot demande) {
     String dateStart = demande['dateStart'] ?? '';
     String dateEnd = demande['dateEnd'] ?? '';
     String amount = demande['amount'] ?? '';
@@ -402,7 +466,8 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
     );
   }
 
-  Widget _buildUpdateDemandeForm(BuildContext context, QueryDocumentSnapshot demande) {
+  Widget _buildUpdateDemandeForm(
+      BuildContext context, QueryDocumentSnapshot demande) {
     String documentId = demande.id;
 
     return SingleChildScrollView(
@@ -425,7 +490,8 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
 
                   if (pickedDate != null) {
                     setState(() {
-                      dateStartController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+                      dateStartController.text =
+                          DateFormat('yyyy-MM-dd').format(pickedDate);
                     });
                   }
                 },
@@ -445,7 +511,8 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
 
                   if (pickedDate != null) {
                     setState(() {
-                      dateEndController.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+                      dateEndController.text =
+                          DateFormat('yyyy-MM-dd').format(pickedDate);
                     });
                   }
                 },
@@ -489,7 +556,8 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
     );
   }
 
-  void _updateDemandeInFirestore(BuildContext context, String documentId) async {
+  void _updateDemandeInFirestore(
+      BuildContext context, String documentId) async {
     try {
       if (_validateInputs()) {
         Demande updatedDemande = Demande(
@@ -502,7 +570,8 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
 
         await _firebaseService.updateDemande(documentId, updatedDemande);
         Navigator.pop(context);
-        ToastUtils.showUpdateToast(context, 'Done', 'Item updated Successfully');
+        ToastUtils.showUpdateToast(
+            context, 'Done', 'Item updated Successfully');
         _clearInputs();
       } else {
         ToastUtils.showErrorToast(
@@ -514,5 +583,4 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
           context, 'Error', 'Failed to update item. Please try again.');
     }
   }
-
 }
