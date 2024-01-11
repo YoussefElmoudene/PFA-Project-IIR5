@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_management_mobile/core/utils/size_utils.dart';
+import 'package:travel_management_mobile/service/storage.service.dart';
 import '../../../theme/custom_text_style.dart';
 import '../../../theme/theme_helper.dart';
 import '../../components/app_bar/appbar_leading_image.dart';
@@ -97,7 +98,6 @@ class HomeScreenPageState extends State<HomeScreenPage>
         width: 60.h,
         text: "+",
         buttonTextStyle: CustomTextStyles.titleLargeSemiBold,
-
       ),
     );
   }
@@ -211,27 +211,25 @@ class HomeScreenPageState extends State<HomeScreenPage>
             ),
           ),
           SizedBox(height: 10.v),
-
           Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 4.0),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 4.h),
-                          child: Text(
-                            "City : $city",
-                            style: theme.textTheme.titleSmall,
-                          ),
-                        ),
-                      ],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 4.0),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 4.h),
+                      child: Text(
+                        "City : $city",
+                        style: theme.textTheme.titleSmall,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-
+            ],
+          ),
           SizedBox(height: 10.v),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -315,13 +313,15 @@ class HomeScreenPageState extends State<HomeScreenPage>
   //   await _firestore.collection('demandes').doc(demande.id).delete();
   // }
 
-  void _showAddDemandeModal(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return _buildAddDemandeForm(context);
-      },
-    );
+  void _showAddDemandeModal(BuildContext context) async {
+    final token = await StorageService().getToken();
+    print('$token');
+    // showModalBottomSheet(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return _buildAddDemandeForm(context);
+    //   },
+    // );
   }
 
   Widget _buildAddDemandeForm(BuildContext context) {
