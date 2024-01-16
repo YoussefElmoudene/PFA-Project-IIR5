@@ -12,6 +12,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {DemandeService} from "../../../controller/service/demande.service";
 import {Demande} from "../../../controller/model/demande.model";
 import {DemandeCreateComponent} from "./demande-create/demande-create.component";
+import {ActivatedRoute} from "@angular/router";
+import {FormsModule} from "@angular/forms";
 
 @Component({
     selector: 'dashboard',
@@ -29,11 +31,15 @@ import {DemandeCreateComponent} from "./demande-create/demande-create.component"
         MatSelectModule,
         MatTooltipModule,
         NgForOf,
-        NgIf
+        NgIf,
+        FormsModule
     ]
 })
 export class DashboardComponent implements OnInit {
+    selectedType: string = 'all'
+
     constructor(public dialog: MatDialog,
+                private activate: ActivatedRoute,
                 private demandeService: DemandeService) {
     }
 
@@ -47,9 +53,20 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.demandeService.findAll().subscribe(res => {
-            this.demandes = res
-        })
+        this.fetch_data();
+    }
+
+    private fetch_data() {
+        const email = this.activate.snapshot.params.email
+        if (email) {
+            this.demandeService.findByUser(email).subscribe(res => {
+                this.demandes = res
+            })
+        } else {
+            this.demandeService.findAll().subscribe(res => {
+                this.demandes = res
+            })
+        }
     }
 
     openCreate() {
@@ -58,5 +75,35 @@ export class DashboardComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
 
         });
+    }
+
+    filterByType() {
+        console.log(this.selectedType)
+        if (this.selectedType === 'all') {
+            this.fetch_data()
+        } else {
+            this.demandeService.findByEtat(this.selectedType).subscribe(res => {
+                this.demandes = res
+            })
+        }
+    }
+
+
+    changeEtat(etat: string, demande: Demande) {
+        demande.etat = etat
+        this.demandeService.changeEtat(demande.id, etat)
+            .subscribe(res => {
+                console.log(res)
+            }, error => {
+                console.error(error)
+            })
+    }
+
+    supprimer(demande: Demande) {
+        this.demandeService.delete(demande.id)
+            .subscribe(res => {
+                const index = this.demandes.indexOf(demande)
+                this.demandes.splice(index, 1)
+            })
     }
 }

@@ -52,6 +52,10 @@ public class DemandesService {
         }
     }
 
+    public List<Demande> findByEtat(String etat) {
+        return demandesRepository.findByEtat(etat);
+    }
+
     public Demande updateDemandes(int id, Demande updatedDemandes) {
         if (id > 0 && updatedDemandes != null) {
             Optional<Demande> existingDemandes = demandesRepository.findById(id);

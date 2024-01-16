@@ -18,6 +18,7 @@ import {CreateDemandeComponent} from "./create-demande/create-demande.component"
 import {DemandeService} from "../../../controller/service/demande.service";
 import {Demande} from "../../../controller/model/demande.model";
 import {MatMenuModule} from "@angular/material/menu";
+import {AuthService} from "../../../core/auth/auth.service";
 
 @Component({
     selector: 'app-home',
@@ -29,12 +30,10 @@ import {MatMenuModule} from "@angular/material/menu";
         MatProgressBarModule, MatButtonModule, RouterLink,
         FuseFindByKeyPipe, PercentPipe, I18nPluralPipe, FormsModule, DatePipe, MatMenuModule],
 })
-export class HomeComponent
-    implements OnInit {
-    startTime = new Date()
-    endTime = new Date()
+export class HomeComponent implements OnInit {
 
     constructor(public dialog: MatDialog,
+                private auth: AuthService,
                 private demandeService: DemandeService) {
     }
 
@@ -48,7 +47,7 @@ export class HomeComponent
     }
 
     ngOnInit() {
-        this.demandeService.findAll().subscribe(res => {
+        this.demandeService.findByUser(this.auth._user?.email).subscribe(res => {
             this.demandes = res
         })
     }

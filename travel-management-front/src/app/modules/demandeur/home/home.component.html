@@ -36,8 +36,8 @@
                     >
                         <mat-option [value]="'all'">Tous</mat-option>
                         <ng-container>
-                            <mat-option [value]="'completed'">accepté</mat-option>
-                            <mat-option [value]="'coming'">rejeté</mat-option>
+                            <mat-option [value]="'accepter'">accepter</mat-option>
+                            <mat-option [value]="'rejeter'">rejeter</mat-option>
                             <mat-option [value]="'coming'">en cours de traitement</mat-option>
                         </ng-container>
                     </mat-select>
@@ -62,26 +62,26 @@
                                 </ng-container>
                                 <!-- Completed at least once -->
                                 <div class="flex items-center">
-                                    <ng-container *ngIf="demande?.etat?.includes('accepté')">
+                                    <ng-container *ngIf="demande?.etat?.includes('accepter')">
                                         <mat-icon
                                             class="icon-size-5 text-green-600"
                                             [svgIcon]="'heroicons_solid:check-badge'"
-                                            [matTooltip]="'accepté'"></mat-icon>
+                                            [matTooltip]="'accepter'"></mat-icon>
                                     </ng-container>
 
 
-                                    <ng-container *ngIf="demande?.etat?.includes('en cours')">
+                                    <ng-container *ngIf="demande?.etat?.includes('coming')">
                                         <mat-icon
                                             class="icon-size-5 text-blue-600"
                                             svgIcon="access_time_filled"
                                             [matTooltip]="'en cours de traitement'"></mat-icon>
                                     </ng-container>
 
-                                    <ng-container *ngIf="demande?.etat?.includes('rejeté')">
+                                    <ng-container *ngIf="demande?.etat?.includes('rejeter')">
                                         <mat-icon
                                             class="icon-size-5 text-red-600"
                                             svgIcon="access_time_filled"
-                                            [matTooltip]="'rejeté'"></mat-icon>
+                                            [matTooltip]="'rejeter'"></mat-icon>
                                     </ng-container>
                                 </div>
                             </div>

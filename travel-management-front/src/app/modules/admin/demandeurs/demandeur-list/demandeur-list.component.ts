@@ -12,6 +12,9 @@ import {FormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatDialog} from "@angular/material/dialog";
 import {DemandeurCreateComponent} from "../demandeur-create/demandeur-create.component";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatIconModule} from "@angular/material/icon";
+import {RouterLink} from "@angular/router";
 
 @Component({
     selector: 'app-demandeur-list',
@@ -24,7 +27,10 @@ import {DemandeurCreateComponent} from "../demandeur-create/demandeur-create.com
         MatOptionModule,
         MatSelectModule,
         FormsModule,
-        MatInputModule
+        MatInputModule,
+        MatMenuModule,
+        MatIconModule,
+        RouterLink
     ],
     standalone: true
 })
