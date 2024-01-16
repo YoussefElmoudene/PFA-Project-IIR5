@@ -43,4 +43,12 @@ public class UserService {
     public List<User> findByRole(Role role) {
         return userDao.findByRole(role);
     }
+
+    public void updateUser(int id,User userInfo) {
+        User user=userDao.findById(id).orElseThrow(() -> new IllegalArgumentException("app not found with id " + id));
+        user.setFirstName(userInfo.getFirstName());
+        user.setLastName(userInfo.getLastName());
+        user.setTel(userInfo.getTel());
+        userDao.save(user);
+    }
 }

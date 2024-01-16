@@ -39,12 +39,15 @@ class UserService {
           'Content-Type': 'application/json',
         };
         final response = await http.get(
-          Uri.parse('${ApiUrl.springUrl}/api/users/$userId'),
+          Uri.parse('${ApiUrl.springUrl}/users/$userId'),
           headers: headers,
         );
         if (response.statusCode == 200) {
           final Map<String, dynamic> userData = json.decode(response.body);
+          print('User Information: $userData');
+
           return UserModel.fromJson(userData);
+
         } else {
           throw Exception('Failed to load user information');
         }
@@ -57,7 +60,7 @@ class UserService {
   }
 
   Future<UserModel?> updateProfile(
-      String updatedNom, String updatedPrenom) async {
+      String updatedFname, String updatedLname,String updatedPhoneNumber) async {
     try {
       final token = await StorageService().getToken();
       final Map<String, dynamic>? decodedToken = await decodeToken();
@@ -67,12 +70,13 @@ class UserService {
         'Content-Type': 'application/json',
       };
       final data = {
-        'nom': updatedNom,
-        'prenom': updatedPrenom,
+        'lastName': updatedFname,
+        'firstName': updatedLname,
+        'tel':updatedPhoneNumber
       };
 
       final response = await http.put(
-        Uri.parse('${ApiUrl.springUrl}/api/users/update/$userId'),
+        Uri.parse('${ApiUrl.springUrl}/users/update/$userId'),
         headers: headers,
         body: json.encode(data),
       );
