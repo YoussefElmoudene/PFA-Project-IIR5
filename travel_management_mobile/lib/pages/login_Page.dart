@@ -14,7 +14,7 @@ import '../theme/custom_text_style.dart';
 import '../theme/theme_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'home_screen_container_screen/home_screen_container_screen.dart';
+import 'bottom_navigation/home_screen_container_screen.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
