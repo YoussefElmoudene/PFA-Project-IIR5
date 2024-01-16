@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>creation de demandeur</h2>
+<mat-dialog-content class="mat-typography  md:min-w-[700px] w-full">
+    <div class="w-full">
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8">
+
+            <mat-form-field
+                class="flex-auto w-full">
+                <mat-label>FirstName</mat-label>
+                <input
+                    [(ngModel)]="demandeur.firstName"
+                    name="firstName"
+                    matInput
+                    [placeholder]="'first name'">
+            </mat-form-field>
+
+            <mat-form-field
+                class="flex-auto w-full">
+                <mat-label>LastName</mat-label>
+                <input
+                    [(ngModel)]="demandeur.lastName"
+                    name="lastName"
+                    matInput
+                    [placeholder]="'last name'">
+            </mat-form-field>
+
+            <mat-form-field
+                class="flex-auto w-full">
+                <mat-label>Email</mat-label>
+                <input
+                    [(ngModel)]="demandeur.email"
+                    name="email"
+                    matInput
+                    [placeholder]="'email'">
+            </mat-form-field>
+
+            <mat-form-field
+                class="flex-auto w-full">
+                <mat-label>Password</mat-label>
+                <input
+                    [(ngModel)]="demandeur.password"
+                    name="password"
+                    matInput
+                    type="password"
+                    [placeholder]="'password'">
+            </mat-form-field>
+
+            <mat-form-field
+                class="flex-auto w-full">
+                <mat-label>Telephone</mat-label>
+                <input
+                    [(ngModel)]="demandeur.tel"
+                    name="tel"
+                    matInput
+                    [placeholder]="'tel'">
+            </mat-form-field>
+
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button (click)="save()" [mat-dialog-close]="true">AJouter</button>
+</mat-dialog-actions>
