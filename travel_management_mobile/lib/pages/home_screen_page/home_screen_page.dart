@@ -114,7 +114,7 @@ class HomeScreenPageState extends State<HomeScreenPage>
                   alignment: Alignment.centerLeft,
                   child: Padding(
                       padding: EdgeInsets.only(right: 24.h),
-                      child: Text("Hello, Badr 👋",
+                      child: Text("Hello, User 👋",
                           style: theme.textTheme.headlineLarge)))
             ])),
         SizedBox(height: 40.v),
