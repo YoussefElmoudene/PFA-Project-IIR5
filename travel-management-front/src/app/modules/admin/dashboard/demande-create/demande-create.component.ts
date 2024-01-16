@@ -39,7 +39,7 @@ export class DemandeCreateComponent {
 
     save() {
         this.demande.demandeur = this.auth._user
-        this.demande.etat = 'en cours de traitement'
+        this.demande.etat = 'coming'
         this.demandeService.save(this.demande)
             .subscribe(response => {
                 console.log(response)

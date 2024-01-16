@@ -30,4 +30,20 @@ export class DemandeService {
     public findAll(): Observable<Demande[]> {
         return this.http.get<Demande[]>(this.url + 'all')
     }
-}
+
+    public findByUser(email): Observable<Demande[]> {
+        return this.http.get<Demande[]>(this.url + `user/${email}`)
+    }
+
+    public findByEtat(etat): Observable<Demande[]> {
+        return this.http.get<Demande[]>(this.url + `etat/${etat}`)
+    }
+
+    public changeEtat(id, etat): Observable<Demande> {
+        return this.http.get<Demande>(this.url + `changeEtat/${id}/${etat}`)
+    }
+
+    delete(id: number): Observable<any> {
+        return this.http.delete<any>(this.url + `delete/${id}`)
+    }
+}//
