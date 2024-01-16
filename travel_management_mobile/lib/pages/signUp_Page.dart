@@ -22,10 +22,10 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   TextEditingController emailController = TextEditingController();
-
   TextEditingController passwordController = TextEditingController();
   TextEditingController lnameController = TextEditingController();
   TextEditingController fnameController = TextEditingController();
+  TextEditingController telController = TextEditingController();
 
   bool rememberme = false;
 
@@ -53,7 +53,7 @@ class _SignUpPageState extends State<SignUpPage> {
           lnameController.text,
           emailController.text,
           passwordController.text,
-          "069797349375");
+          telController.text);
 
       Navigator.pushNamed(context, AppRoutes.homeScreen);
     } catch (e) {
@@ -137,7 +137,21 @@ class _SignUpPageState extends State<SignUpPage> {
           prefix: Container(
               margin: EdgeInsets.fromLTRB(20.h, 20.v, 12.h, 20.v),
               child: CustomImageView(
-                  imagePath: ImageConstant.imgCheckmark,
+                  imagePath: ImageConstant.imgUser,
+                  height: 20.adaptSize,
+                  width: 20.adaptSize)),
+          prefixConstraints: BoxConstraints(maxHeight: 60.v),
+          contentPadding:
+              EdgeInsets.only(top: 21.v, right: 30.h, bottom: 21.v)),
+      SizedBox(height: 20.v),
+      CustomTextFormField(
+          controller: telController,
+          hintText: "Phone Number",
+          textInputType: TextInputType.text,
+          prefix: Container(
+              margin: EdgeInsets.fromLTRB(20.h, 20.v, 12.h, 20.v),
+              child: CustomImageView(
+                  imagePath: ImageConstant.imgIcons,
                   height: 20.adaptSize,
                   width: 20.adaptSize)),
           prefixConstraints: BoxConstraints(maxHeight: 60.v),
@@ -179,14 +193,6 @@ class _SignUpPageState extends State<SignUpPage> {
           suffixConstraints: BoxConstraints(maxHeight: 60.v),
           obscureText: true,
           contentPadding: EdgeInsets.symmetric(vertical: 21.v)),
-      SizedBox(height: 20.v),
-      CustomCheckboxButton(
-          text: "Remember me",
-          value: rememberme,
-          padding: EdgeInsets.symmetric(vertical: 3.v),
-          onChange: (value) {
-            rememberme = value;
-          }),
       SizedBox(height: 20.v),
       CustomElevatedButton(
           text: "Sign Up",

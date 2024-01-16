@@ -14,6 +14,8 @@ import java.util.Optional;
 @RequestMapping("users")
 public class UserController {
 
+
+
     @Autowired
     private UserService userService;
 
@@ -51,5 +53,10 @@ public class UserController {
     @GetMapping("/role/{role}")
     public List<User> findByRole(@PathVariable String role) {
         return userService.findByRole(Role.valueOf(role));
+    }
+
+    @PutMapping("/update/{id}")
+    public void updateUser(@PathVariable int id,@RequestBody User userInfo) {
+        userService.updateUser(id, userInfo);
     }
 }

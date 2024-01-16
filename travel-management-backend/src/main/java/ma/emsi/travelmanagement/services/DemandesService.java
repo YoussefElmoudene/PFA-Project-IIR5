@@ -1,5 +1,6 @@
 package ma.emsi.travelmanagement.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import ma.emsi.travelmanagement.entities.Demande;
 import ma.emsi.travelmanagement.entities.User;
@@ -79,5 +80,18 @@ public class DemandesService {
 
     public void deleteDemandes(int id) {
         demandesRepository.deleteById(id);
+    }
+
+    public List<Demande> filterUserDemandesByEtat(User user,String etat) {
+            log.info("user {} with etat {}",user.toString(),etat);
+        return demandesRepository.findByDemandeurAndEtat(user, etat);
+    }
+
+    public Demande updateEtat(int id, String etat) {
+        Demande demande = demandesRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Demande not found with id: " + id));
+        log.info("new etat {} demande {}",etat,demande.toString());
+        demande.setEtat(etat);
+        return demandesRepository.save(demande);
     }
 }

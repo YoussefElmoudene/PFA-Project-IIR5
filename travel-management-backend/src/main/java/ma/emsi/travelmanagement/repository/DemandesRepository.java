@@ -15,4 +15,6 @@ public interface DemandesRepository extends JpaRepository<Demande, Integer> {
 
 
     List<Demande> findByEtat(String  etat);
+
+    List<Demande> findByDemandeurAndEtat(User user,String etat);
 }
