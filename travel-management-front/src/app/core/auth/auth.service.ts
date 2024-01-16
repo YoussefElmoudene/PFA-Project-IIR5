@@ -9,7 +9,7 @@ import {User} from "../../controller/model/user.model";
 @Injectable({providedIn: 'root'})
 export class AuthService {
     public _user: User = null;
-    public host = environment.AUTH_URL;
+    public host = environment.URL;
     private _authenticated: boolean = false;
     private _showAlert: boolean = false;
 
@@ -103,15 +103,12 @@ export class AuthService {
             ),
             switchMap((response: any) => {
                 console.log(response)
-                if (response.accessToken) {
-                    this.accessToken = response.accessToken;
-                }
 
                 // Set the authenticated flag to true
                 this._authenticated = true;
                 // Store the user on the user service
-                this._userService.user = response.user;
-                this._user = response.user
+                this._userService.user = response;
+                this._user = response
                 console.log(this._user)
                 // Return true
                 return of(true);

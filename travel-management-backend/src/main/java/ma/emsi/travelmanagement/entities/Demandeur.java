@@ -1,12 +1,12 @@
 package ma.emsi.travelmanagement.entities;
 
-import java.util.List;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,11 +15,7 @@ import lombok.Setter;
 @Entity
 @DiscriminatorValue("demandeur")
 public class Demandeur extends User {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-
-	@OneToMany(mappedBy = "demandeur", cascade = CascadeType.ALL)
-	private List<Demandes> demandes;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 }

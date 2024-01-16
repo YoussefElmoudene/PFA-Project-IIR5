@@ -4,6 +4,21 @@ import {FuseNavigationItem} from '@fuse/components/navigation';
 export const defaultNavigation: FuseNavigationItem[] = [
     {
         id: 'home',
+        title: 'Dashboard',
+        type: 'basic',
+        icon: 'heroicons_outline:chart-pie',
+        link: '/admin/home'
+    }, {
+        id: 'users',
+        title: 'Demandeurs',
+        type: 'basic',
+        icon: 'heroicons_outline:users',
+        link: '/admin/users'
+    }
+];
+export const compactNavigation: FuseNavigationItem[] = [
+    {
+        id: 'home',
         title: 'Home',
         type: 'basic',
         icon: 'heroicons_outline:chart-pie',
@@ -17,22 +32,13 @@ export const defaultNavigation: FuseNavigationItem[] = [
         link: '/demandeur/demandes'
     }
 ];
-export const compactNavigation: FuseNavigationItem[] = [
-    {
-        id: 'home',
-        title: 'Home',
-        type: 'basic',
-        icon: 'heroicons_outline:chart-pie',
-        link: '/home'
-    }
-];
 export const futuristicNavigation: FuseNavigationItem[] = [
     {
         id: 'home',
         title: 'Home',
         type: 'basic',
         icon: 'heroicons_outline:chart-pie',
-        link: '/home'
+        link: '/demandeur/home'
     }
 ];
 export const horizontalNavigation: FuseNavigationItem[] = [
@@ -41,6 +47,6 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         title: 'Home',
         type: 'basic',
         icon: 'heroicons_outline:chart-pie',
-        link: '/home'
+        link: '/demandeur/home'
     }
 ];

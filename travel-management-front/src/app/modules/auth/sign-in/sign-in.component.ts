@@ -82,22 +82,15 @@ export class AuthSignInComponent implements OnInit {
                 (authority) => {
 
                     if (authority === Role.ROLE_ADMIN) {
-                        location.href = '/admin/dashboard'
+                        location.href = '/admin/home'
                     } else if (authority === Role.ROLE_DEMANDEUR) {
                         location.href = '/demandeur/home'
                     } else {
                         this._authService.signOut();
                         // Re-enable the form
                         this.signInForm.enable();
-
                         // Reset the form
                         this.signInNgForm.resetForm();
-
-                        // Set the alert
-                        // this.alert.show(
-                        //     'warning',
-                        //     'Your account is not valid account, please contact administration.')
-
                     }
                 },
                 (error) => {

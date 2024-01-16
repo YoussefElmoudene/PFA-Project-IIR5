@@ -9,15 +9,8 @@ import {LayoutComponent} from 'app/layout/layout.component';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 export const appRoutes: Route[] = [
 
-    // Redirect empty path to '/example'
-    {path: '', pathMatch : 'full', redirectTo: 'example'},
-
-    // Redirect signed-in user to the '/example'
-    //
-    // After the user signs in, the sign-in page will redirect the user to the 'signed-in-redirect'
-    // path. Below is another redirection for that path to redirect the user to the desired
-    // location. This is a small convenience to keep all main routes together here on this file.
-    {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'example'},
+    // Redirect empty path to '/dashboard'
+    {path: '', pathMatch : 'full', redirectTo: 'sign-out'},
 
     // Auth routes for guests
     {
@@ -64,7 +57,8 @@ export const appRoutes: Route[] = [
         ]
     },
 
-    // Admin routes
+
+    //  routes
     {
         path: '',
         canActivate: [AuthGuard],
@@ -74,23 +68,18 @@ export const appRoutes: Route[] = [
             initialData: initialDataResolver
         },
         children: [
-            {path: 'admin/dashboard', loadChildren: () => import('app/modules/admin/example/example.routes')},
-        ]
-    },
-    // demandeur routes
-    {
-        path: 'demandeur',
-        canActivate: [AuthGuard],
-        canActivateChild: [AuthGuard],
-        component: LayoutComponent,
-        data: {
-            layout: 'enterprise'
-        },
-        resolve: {
-            initialData: initialDataResolver
-        },
-        children: [
-            {path: '', loadChildren: () => import('app/modules/demandeur/demandeur.routes')},
+            {path: 'demandeur',
+                data: {
+                    layout: 'enterprise'
+                },
+                loadChildren: () => import('app/modules/demandeur/demandeur.routes')
+            },
+            {path: 'admin',
+                data: {
+                    layout: 'classy'
+                },
+                loadChildren: () => import('app/modules/admin/admin.routes')
+            },
         ]
     }
 ];

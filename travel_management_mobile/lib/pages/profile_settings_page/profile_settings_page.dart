@@ -1,5 +1,6 @@
-
 import 'package:flutter/material.dart';
+import 'package:travel_management_mobile/pages/login_Page.dart';
+import 'package:travel_management_mobile/service/storage.service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../components/app_bar/appbar_leading_image.dart';
@@ -26,104 +27,104 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
-    return  Scaffold(
-            appBar: _buildAppBar(context),
-            body: Container(
-                width: double.maxFinite,
-                padding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 30.v),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildProfile(context),
-                      SizedBox(height: 60.v),
-                      CustomElevatedButton(
-                          height: 28.v,
-                          width: 134.h,
-                          text: "Edit Profile",
-                          leftIcon: Container(
-                              margin: EdgeInsets.only(right: 20.h),
-                              child: CustomImageView(
-                                  imagePath: ImageConstant.imgUser,
-                                  height: 28.adaptSize,
-                                  width: 28.adaptSize)),
-                          buttonStyle: CustomButtonStyles.none,
-                          buttonTextStyle:
-                              CustomTextStyles.titleMediumSemiBold_1,
-                          onPressed: () {
-                            onTapEditProfile(context);
-                          }),
-                      SizedBox(height: 30.v),
-                      Row(children: [
+    return Scaffold(
+        appBar: CustomAppBar(
+            height: 50.v,
+            leadingWidth: 56.h,
+            leading: AppbarLeadingImage(
+                imagePath: ImageConstant.logo,
+                margin: EdgeInsets.only(left: 24.h, top: 9.v, bottom: 9.v)),
+            title: AppbarTitle(
+                text: "Profile", margin: EdgeInsets.only(left: 16.h)),
+            actions: [
+              AppbarTrailingImage(
+                imagePath: ImageConstant.imgIcons,
+                margin: EdgeInsets.only(left: 24.h, top: 11.v, right: 11.h),
+              ),
+              AppbarTrailingImage(
+                  imagePath: ImageConstant.imgClock,
+                  margin: EdgeInsets.only(left: 20.h, top: 11.v, right: 35.h))
+            ]),
+        body: Container(
+            width: double.maxFinite,
+            padding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 30.v),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _buildProfile(context),
+                  SizedBox(height: 60.v),
+                  CustomElevatedButton(
+                      height: 28.v,
+                      width: 134.h,
+                      text: "Edit Profile",
+                      leftIcon: Container(
+                          margin: EdgeInsets.only(right: 20.h),
+                          child: CustomImageView(
+                              imagePath: ImageConstant.imgUser,
+                              height: 28.adaptSize,
+                              width: 28.adaptSize)),
+                      buttonStyle: CustomButtonStyles.none,
+                      buttonTextStyle: CustomTextStyles.titleMediumSemiBold_1,
+                      onPressed: () {
+                        onTapEditProfile(context);
+                      }),
+                  SizedBox(height: 30.v),
+                  Row(children: [
+                    CustomImageView(
+                        imagePath: ImageConstant.imgUser,
+                        height: 28.adaptSize,
+                        width: 28.adaptSize),
+                    Padding(
+                        padding: EdgeInsets.only(left: 20.h, top: 5.v),
+                        child: Text("First Name",
+                            style: CustomTextStyles.titleMediumSemiBold_1))
+                  ]),
+                  SizedBox(height: 15.v),
+                  Row(children: [
+                    CustomImageView(
+                        imagePath: ImageConstant.imgUser,
+                        height: 28.adaptSize,
+                        width: 28.adaptSize),
+                    Padding(
+                        padding: EdgeInsets.only(left: 20.h, top: 5.v),
+                        child: Text("Last Name",
+                            style: CustomTextStyles.titleMediumSemiBold_1))
+                  ]),
+                  SizedBox(height: 15.v),
+                  Row(children: [
+                    CustomImageView(
+                        imagePath: ImageConstant.imgUser,
+                        height: 28.adaptSize,
+                        width: 28.adaptSize),
+                    Padding(
+                        padding: EdgeInsets.only(left: 20.h, top: 5.v),
+                        child: Text("Email",
+                            style: CustomTextStyles.titleMediumSemiBold_1))
+                  ]),
+                  SizedBox(height: 15.v),
+                  GestureDetector(
+                    onTap: () {
+                      onTapSignOut(context);
+                    },
+                    child: Row(
+                      children: [
                         CustomImageView(
-                            imagePath: ImageConstant.imgIconlyCurvedWallet,
-                            height: 28.adaptSize,
-                            width: 28.adaptSize),
+                          imagePath: ImageConstant.imgRefresh,
+                          height: 28.adaptSize,
+                          width: 28.adaptSize,
+                        ),
                         Padding(
-                            padding: EdgeInsets.only(left: 20.h, top: 5.v),
-                            child: Text("Payment",
-                                style: CustomTextStyles.titleMediumSemiBold_1))
-                      ]),
-                      SizedBox(height: 30.v),
-                      CustomElevatedButton(
-                          height: 28.v,
-                          width: 148.h,
-                          text: "Notifications",
-                          leftIcon: Container(
-                              margin: EdgeInsets.only(right: 20.h),
-                              child: CustomImageView(
-                                  imagePath: ImageConstant.imgIcons,
-                                  height: 28.adaptSize,
-                                  width: 28.adaptSize)),
-                          buttonStyle: CustomButtonStyles.none,
-                          buttonTextStyle:
-                              CustomTextStyles.titleMediumSemiBold_1,
-                          onPressed: () {
-                            onTapNotifications(context);
-                          }),
-                      SizedBox(height: 30.v),
-                      CustomElevatedButton(
-                          height: 28.v,
-                          width: 114.h,
-                          text: "Security",
-                          leftIcon: Container(
-                              margin: EdgeInsets.only(right: 20.h),
-                              child: CustomImageView(
-                                  imagePath:
-                                      ImageConstant.imgCheckmarkWhiteA700,
-                                  height: 28.adaptSize,
-                                  width: 28.adaptSize)),
-                          buttonStyle: CustomButtonStyles.none,
-                          buttonTextStyle:
-                              CustomTextStyles.titleMediumSemiBold_1,
-                          onPressed: () {
-                            onTapSecurity(context);
-                          }),
-                      SizedBox(height: 30.v),
-                      Row(children: [
-                        CustomImageView(
-                            imagePath: ImageConstant.imgIconlyCurvedInfo,
-                            height: 28.adaptSize,
-                            width: 28.adaptSize),
-                        Padding(
-                            padding: EdgeInsets.only(left: 20.h, top: 5.v),
-                            child: Text("Help",
-                                style: CustomTextStyles.titleMediumSemiBold_1))
-                      ]),
-                      SizedBox(height: 30.v),
-                      _buildDarkTheme(context),
-                      SizedBox(height: 30.v),
-                      Row(children: [
-                        CustomImageView(
-                            imagePath: ImageConstant.imgRefresh,
-                            height: 28.adaptSize,
-                            width: 28.adaptSize),
-                        Padding(
-                            padding: EdgeInsets.only(left: 20.h, top: 5.v),
-                            child: Text("Logout",
-                                style: CustomTextStyles.titleMediumRed400))
-                      ]),
-                      SizedBox(height: 5.v)
-                    ])));
+                          padding: EdgeInsets.only(left: 20.h, top: 5.v),
+                          child: Text(
+                            "Logout",
+                            style: CustomTextStyles.titleMediumRed400,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 5.v)
+                ])));
   }
 
   /// Section Widget
@@ -171,24 +172,16 @@ class ProfilePage extends StatelessWidget {
     ]);
   }
 
-  /// Section Widget
-  Widget _buildDarkTheme(BuildContext context) {
-    return Row(children: [
-      CustomImageView(
-          imagePath: ImageConstant.imgEye,
-          height: 28.adaptSize,
-          width: 28.adaptSize),
-      Padding(
-          padding: EdgeInsets.only(left: 20.h, top: 2.v, bottom: 3.v),
-          child: Text("Dark Theme",
-              style: CustomTextStyles.titleMediumSemiBold_1)),
-      Spacer(),
-      CustomSwitch(
-          value: isSelectedSwitch,
-          onChange: (value) {
-            isSelectedSwitch = value;
-          })
-    ]);
+  onTapSignOut(BuildContext context) async {
+    try {
+      await StorageService().deleteAll();
+
+      Navigator.of(context, rootNavigator: true).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginPage()));
+    } catch (e) {
+      print('Error during sign out: $e');
+      // Handle errors as needed
+    }
   }
 
   /// Opens a URL in the device's default web browser.
@@ -210,11 +203,11 @@ class ProfilePage extends StatelessWidget {
 
   /// Navigates to the notificationSettingsScreen when the action is triggered.
   onTapNotifications(BuildContext context) {
-   // Navigator.pushNamed(context, AppRoutes.notificationSettingsScreen);
+    // Navigator.pushNamed(context, AppRoutes.notificationSettingsScreen);
   }
 
   /// Navigates to the securityScreen when the action is triggered.
   onTapSecurity(BuildContext context) {
-   // Navigator.pushNamed(context, AppRoutes.securityScreen);
+    // Navigator.pushNamed(context, AppRoutes.securityScreen);
   }
 }

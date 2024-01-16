@@ -14,12 +14,11 @@
             <!-- Logo -->
             <div class="flex items-center justify-center">
                 <img
-                    class="w-8"
+                    class="w-14"
                     src="assets/images/logo/logo.svg">
             </div>
             <!-- Components -->
             <div class="flex items-center ml-auto">
-                <notifications></notifications>
                 <user [showAvatar]="false"></user>
             </div>
         </div>
@@ -47,7 +46,7 @@
         <div class="flex flex-0 items-center justify-center h-16 pr-6 pl-2 mt-2 mb-4 opacity-12">
             <img
                 class="max-w-36"
-                src="assets/images/logo/logo-text-on-dark.svg">
+                src="assets/images/logo/logo.svg">
         </div>
     </ng-container>
 </fuse-vertical-navigation>
@@ -68,9 +67,6 @@
         <div class="flex items-center pl-2 ml-auto space-x-0.5 sm:space-x-2">
             <languages></languages>
             <fuse-fullscreen class="hidden md:block"></fuse-fullscreen>
-            <search [appearance]="'bar'"></search>
-            <shortcuts></shortcuts>
-            <messages></messages>
         </div>
     </div>
 

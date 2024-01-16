@@ -1,0 +1,77 @@
+<h2 mat-dialog-title>Nouveau demande</h2>
+<mat-dialog-content class="mat-typography  md:min-w-[700px] w-full">
+    <div class="w-full">
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8">
+
+            <mat-form-field
+                class="flex-auto w-full">
+                <mat-label>Ville</mat-label>
+                <input
+                    [(ngModel)]="demande.ville"
+                    name="ville"
+                    matInput
+                    [placeholder]="'ville'">
+            </mat-form-field>
+
+            <mat-form-field
+                class="flex-auto w-full">
+                <mat-label>Date début</mat-label>
+                <input
+                    [(ngModel)]="demande.dateDebut"
+                    name="dateDebut"
+                    type="date"
+                    matInput
+                    [placeholder]="'date début'">
+            </mat-form-field>
+
+            <mat-form-field
+                class="flex-auto w-full">
+                <mat-label>Date fin</mat-label>
+                <input
+                    [(ngModel)]="demande.dateFin"
+                    name="dateFin"
+                    type="date"
+                    matInput
+                    [placeholder]="'date fin'">
+            </mat-form-field>
+
+            <mat-form-field
+                class="flex-auto w-full">
+                <mat-label>Le total des frais à rembourser</mat-label>
+                <input
+                    [(ngModel)]="demande.frais"
+                    name="frais"
+                    matInput
+                    type="number"
+                    [placeholder]="'frais'">
+            </mat-form-field>
+
+            <mat-form-field
+                class="flex-auto w-full">
+                <mat-label>Moyen de transport</mat-label>
+                <input
+                    [(ngModel)]="demande.moyenTransport"
+                    name="moyenTransport"
+                    matInput
+                    [placeholder]="'Moyen de transport'">
+            </mat-form-field>
+
+            <mat-form-field
+                class="flex-auto w-full">
+                <mat-label>Motif de déplacement</mat-label>
+                <textarea
+                    [(ngModel)]="demande.motif"
+                    name="motif"
+                    matInput
+                    [placeholder]="'Motif de déplacement'">
+                </textarea>
+            </mat-form-field>
+
+
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button (click)="save()" [mat-dialog-close]="true">AJouter</button>
+</mat-dialog-actions>
