@@ -12,4 +12,7 @@ import java.util.Optional;
 @Repository
 public interface DemandesRepository extends JpaRepository<Demande, Integer> {
     List<Demande> findByDemandeur(User user);
+
+
+    List<Demande> findByEtat(String  etat);
 }

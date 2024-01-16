@@ -44,6 +44,7 @@
                     <th class="whitespace-nowrap text-start px-4 py-4 font-bold text-gray-900">LastName</th>
                     <th class="whitespace-nowrap text-start px-4  py-4 font-bold text-gray-900">Tel</th>
                     <th class="whitespace-nowrap text-start px-4 py-4 font-bold text-gray-900">Email</th>
+                    <th class="whitespace-nowrap text-start px-4 py-4 font-bold text-gray-900">Action</th>
                 </tr>
                 </thead>
 
@@ -53,6 +54,18 @@
                     <td class="whitespace-nowrap px-4 py-4 text-gray-700">{{item?.lastName}}</td>
                     <td class="whitespace-nowrap px-4 py-4 text-gray-700">{{item?.tel}}</td>
                     <td class="whitespace-nowrap px-4 py-4 text-gray-700">{{item?.email}}</td>
+                    <td class="whitespace-nowrap px-4 py-4 text-gray-700">
+                        <button [matMenuTriggerFor]="menu" mat-icon-button>
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <button mat-menu-item>Supprimer</button>
+
+                            <button [routerLink]="'/admin/demandes/' + item?.email"
+                                    mat-menu-item>Les demandes
+                            </button>
+                        </mat-menu>
+                    </td>
                 </tr>
                 </tbody>
             </table>

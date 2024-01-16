@@ -35,6 +35,11 @@ public class DemandesController {
         return new ResponseEntity<>(demandes, HttpStatus.OK);
     }
 
+    @GetMapping("/etat/{etat}")
+    public List<Demande> findByEtat(@PathVariable String etat) {
+        return demandesService.findByEtat(etat);
+    }
+
 
     @PostMapping("/create")
     public ResponseEntity<Demande> createDemandes(@RequestBody Demande demandes) {
@@ -55,8 +60,8 @@ public class DemandesController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/changeEtat/{id}")
-    public ResponseEntity<Demande> changeDemandeEtat(@PathVariable int id, @RequestParam String etat) {
+    @GetMapping("/changeEtat/{id}/{etat}")
+    public ResponseEntity<Demande> changeDemandeEtat(@PathVariable int id, @PathVariable String etat) {
         Optional<Demande> optionalDemandes = demandesService.getDemandesById(id);
 
         if (optionalDemandes.isPresent()) {
