@@ -22,6 +22,7 @@ public class UserService {
     public User save(User user) {
         return userDao.save(user);
     }
+   
 
     public Optional<User> findById(Integer id) {
         return userDao.findById(id);

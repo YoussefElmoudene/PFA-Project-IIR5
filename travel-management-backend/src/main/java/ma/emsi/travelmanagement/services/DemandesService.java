@@ -15,28 +15,47 @@ public class DemandesService {
 	@Autowired
 	private DemandesRepository demandesRepository;
 
-	    public List<Demandes> getAllDemandes() {
-	        return demandesRepository.findAll();
-	    }
-
-	    public Optional<Demandes> getDemandesById(int id) {
-	        return demandesRepository.findById(id);
-	    }
-
-	    public Demandes createDemandes(Demandes demandes) {
-	        return demandesRepository.save(demandes);
-	    }
-
-	    public Demandes updateDemandes(int id, Demandes updatedDemandes) {
-	        if (demandesRepository.existsById(id)) {
-	            updatedDemandes.setId(id);
-	            return demandesRepository.save(updatedDemandes);
-	        }
-	        return null;
-	    }
-
-	    public void deleteDemandes(int id) {
-	        demandesRepository.deleteById(id);
-	    }
+	public List<Demandes> getAllDemandes() {
+		return demandesRepository.findAll();
 	}
 
+	public Optional<Demandes> getDemandesById(int id) {
+		return demandesRepository.findById(id);
+	}
+
+	public Demandes createDemandes(Demandes demandes) {
+
+		if (demandes != null) {
+			return demandesRepository.save(demandes);
+		}
+		return null;
+	}
+
+	public Demandes updateDemandes(int id, Demandes updatedDemandes) {
+		if (id > 0 && updatedDemandes != null) {
+			Optional<Demandes> existingDemandes = demandesRepository.findById(id);
+			if (existingDemandes.isPresent()) {
+				Demandes currentDemandes = existingDemandes.get();
+
+				currentDemandes.setMotif(updatedDemandes.getMotif());
+				currentDemandes.setVille(updatedDemandes.getVille());
+				currentDemandes.setEtat(updatedDemandes.getEtat());
+				currentDemandes.setFrais(updatedDemandes.getFrais());
+				currentDemandes.setDateDebut(updatedDemandes.getDateDebut());
+				currentDemandes.setDateFin(updatedDemandes.getDateFin());
+				currentDemandes.setDemandeur(updatedDemandes.getDemandeur());
+				currentDemandes.setMoyenTransport(updatedDemandes.getMoyenTransport());
+
+				return demandesRepository.save(currentDemandes);
+			}
+		}
+		return null;
+	}
+
+	public void deleteDemandes(int id) {
+
+		if (demandesRepository.existsById(id)) {
+			demandesRepository.deleteById(id);
+		}
+	}
+}

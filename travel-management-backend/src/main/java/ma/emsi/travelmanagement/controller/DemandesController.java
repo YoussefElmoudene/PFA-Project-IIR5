@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/demandes")
@@ -46,4 +47,17 @@ public class DemandesController {
 		demandesService.deleteDemandes(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
+	 @GetMapping("/changeEtat/{id}")
+	    public ResponseEntity<Demandes> changeDemandeEtat(@PathVariable int id, @RequestParam String etat) {
+	        Optional<Demandes> optionalDemandes = demandesService.getDemandesById(id);
+
+	        if (optionalDemandes.isPresent()) {
+	            Demandes demandes = optionalDemandes.get();
+	            demandes.setEtat(etat);
+	            Demandes updatedDemandes = demandesService.updateDemandes(id, demandes);
+	            return new ResponseEntity<>(updatedDemandes, HttpStatus.OK);
+	        } else {
+	            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	        }
+	    }
 }
