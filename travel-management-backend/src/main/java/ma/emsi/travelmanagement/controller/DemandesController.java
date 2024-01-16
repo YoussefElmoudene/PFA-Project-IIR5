@@ -1,7 +1,10 @@
 package ma.emsi.travelmanagement.controller;
 
+import jakarta.websocket.server.PathParam;
 import ma.emsi.travelmanagement.entities.Demande;
+import ma.emsi.travelmanagement.entities.User;
 import ma.emsi.travelmanagement.services.DemandesService;
+import ma.emsi.travelmanagement.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +20,16 @@ public class DemandesController {
     @Autowired
     private DemandesService demandesService;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Demande>> getAllDemandes() {
-        List<Demande> demandesList = demandesService.getAllDemandes();
-        return new ResponseEntity<>(demandesList, HttpStatus.OK);
-    }
+
+	@Autowired
+	private UserService userService;
+
+	@GetMapping("/all")
+	public ResponseEntity<List<Demande>> getAllDemandes() {
+		List<Demande> demandesList = demandesService.getAllDemandes();
+		return new ResponseEntity<>(demandesList, HttpStatus.OK);
+	}
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Demande> getDemandesById(@PathVariable int id) {
@@ -55,6 +63,7 @@ public class DemandesController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+
     @GetMapping("/changeEtat/{id}")
     public ResponseEntity<Demande> changeDemandeEtat(@PathVariable int id, @RequestParam String etat) {
         Optional<Demande> optionalDemandes = demandesService.getDemandesById(id);
@@ -68,4 +77,19 @@ public class DemandesController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
+	@GetMapping("/filterByEtat")
+	public ResponseEntity<List<Demande>> filterDemandesByEtatAndUser(@RequestParam(value = "etat") String etat, @RequestParam(value = "id") int id) {
+		Optional<User> user = userService.findById(id);
+		List<Demande> demandesList= demandesService.filterUserDemandesByEtat(user.get(), etat);
+		return	new ResponseEntity<>(demandesList, HttpStatus.OK);
+	}
+
+	@PutMapping("/updateEtat")
+	public ResponseEntity<Demande> updateDemandeEtat( @RequestParam(value = "id") int id,@RequestParam(value = "etat") String etat) {
+		Demande updatedEntity = demandesService.updateEtat(id, etat);
+		return updatedEntity != null ? new ResponseEntity<>(updatedEntity, HttpStatus.OK)
+				: new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
 }
