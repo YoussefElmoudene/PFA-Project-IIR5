@@ -56,13 +56,13 @@ public class DemandesController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	 @GetMapping("/changeEtat/{id}")
-	    public ResponseEntity<Demandes> changeDemandeEtat(@PathVariable int id, @RequestParam String etat) {
-	        Optional<Demandes> optionalDemandes = demandesService.getDemandesById(id);
+	    public ResponseEntity<Demande> changeDemandeEtat(@PathVariable int id, @RequestParam String etat) {
+	        Optional<Demande> optionalDemandes = demandesService.getDemandesById(id);
 
 	        if (optionalDemandes.isPresent()) {
-	            Demandes demandes = optionalDemandes.get();
+	            Demande demandes = optionalDemandes.get();
 	            demandes.setEtat(etat);
-	            Demandes updatedDemandes = demandesService.updateDemandes(id, demandes);
+	            Demande updatedDemandes = demandesService.updateDemandes(id, demandes);
 	            return new ResponseEntity<>(updatedDemandes, HttpStatus.OK);
 	        } else {
 	            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
