@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:travel_management_mobile/pages/home_screen_container_screen/home_screen_container_screen.dart';
+import 'package:travel_management_mobile/pages/bottom_navigation/home_screen_container_screen.dart';
+import 'package:travel_management_mobile/pages/home/home.page.dart';
 import 'package:travel_management_mobile/pages/home_screen_page/home_screen_page.dart';
 import 'package:travel_management_mobile/pages/profile_settings_page/profile_settings_page.dart';
 
@@ -7,7 +8,6 @@ import '../pages/login_Page.dart';
 import '../pages/operation_page/booking_ongoing_page.dart';
 import '../pages/signUp_Page.dart';
 import '../pages/splash_Page.dart';
-
 
 class AppRoutes {
   static const String splashScreen = '/splash';
@@ -17,6 +17,7 @@ class AppRoutes {
   static const String operations = '/operations';
   static const String homeScreen = '/home';
   static const String profileScreen = '/profile';
+  static const String home = '/homePage';
   static Map<String, WidgetBuilder> routes = {
     splashScreen: (context) => SplashPage(),
     loginScreen: (context) => LoginPage(),
@@ -24,7 +25,7 @@ class AppRoutes {
     profileScreen: (context) => ProfilePage(),
     homeScreen: (context) => HomeContainerScreen(),
     operations: (context) => BookingOngoingPage(),
-    // dashboard: (context) => DashboardPage(),
+    home: (context) => HomePage(),
     // homeScreen: (context) => HomeContainerScreen(),
     // profileScreen: (context) => ProfilePage()
   };
