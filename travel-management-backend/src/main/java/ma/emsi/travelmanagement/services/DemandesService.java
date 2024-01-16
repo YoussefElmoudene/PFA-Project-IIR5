@@ -6,7 +6,9 @@ import ma.emsi.travelmanagement.entities.User;
 import ma.emsi.travelmanagement.repository.DemandesRepository;
 import ma.emsi.travelmanagement.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +37,15 @@ public class DemandesService {
             throw new RuntimeException("Your account not found.");
         }
         return demandesRepository.save(demandes);
+    }
+
+    public List<Demande> getDemandesByUser(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            return demandesRepository.findByDemandeur(user.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found");
+        }
     }
 
     public Demande updateDemandes(int id, Demande updatedDemandes) {

@@ -24,27 +24,19 @@ class MartinezcannesItemWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // CustomImageView(
-          //   imagePath: ImageConstant.imgRectangle4,
-          //   height: 100.adaptSize,
-          //   width: 100.adaptSize,
-          //   radius: BorderRadius.circular(
-          //     16.h,
-          //   ),
-          //   margin: EdgeInsets.symmetric(vertical: 1.v),
-          // ),
+
           Padding(
             padding: EdgeInsets.only(bottom: 11.v),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Operation",
+                  "demande",
                   style: theme.textTheme.titleLarge,
                 ),
                 SizedBox(height: 18.v),
                 Text(
-                  "Paris, France",
+                  "city",
                   style: theme.textTheme.bodyMedium,
                 ),
                 SizedBox(height: 12.v),
@@ -59,7 +51,7 @@ class MartinezcannesItemWidget extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(left: 4.h),
                       child: Text(
-                        "4.8",
+                        "",
                         style: theme.textTheme.titleSmall,
                       ),
                     ),

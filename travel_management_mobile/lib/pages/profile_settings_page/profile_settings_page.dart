@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:travel_management_mobile/pages/login_Page.dart';
+import 'package:travel_management_mobile/service/storage.service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../components/app_bar/appbar_leading_image.dart';
@@ -46,37 +48,38 @@ class ProfilePage extends StatelessWidget {
         body: Container(
             width: double.maxFinite,
             padding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 30.v),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-              _buildProfile(context),
-              SizedBox(height: 60.v),
-              CustomElevatedButton(
-                  height: 28.v,
-                  width: 134.h,
-                  text: "Edit Profile",
-                  leftIcon: Container(
-                      margin: EdgeInsets.only(right: 20.h),
-                      child: CustomImageView(
-                          imagePath: ImageConstant.imgUser,
-                          height: 28.adaptSize,
-                          width: 28.adaptSize)),
-                  buttonStyle: CustomButtonStyles.none,
-                  buttonTextStyle: CustomTextStyles.titleMediumSemiBold_1,
-                  onPressed: () {
-                    onTapEditProfile(context);
-                  }),
-              SizedBox(height: 30.v),
-              Row(children: [
-                CustomImageView(
-                    imagePath: ImageConstant.imgUser,
-                    height: 28.adaptSize,
-                    width: 28.adaptSize),
-                Padding(
-                    padding: EdgeInsets.only(left: 20.h, top: 5.v),
-                    child: Text("First Name",
-                        style: CustomTextStyles.titleMediumSemiBold_1))
-              ]),
-              SizedBox(height: 15.v),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _buildProfile(context),
+                  SizedBox(height: 60.v),
+                  CustomElevatedButton(
+                      height: 28.v,
+                      width: 134.h,
+                      text: "Edit Profile",
+                      leftIcon: Container(
+                          margin: EdgeInsets.only(right: 20.h),
+                          child: CustomImageView(
+                              imagePath: ImageConstant.imgUser,
+                              height: 28.adaptSize,
+                              width: 28.adaptSize)),
+                      buttonStyle: CustomButtonStyles.none,
+                      buttonTextStyle: CustomTextStyles.titleMediumSemiBold_1,
+                      onPressed: () {
+                        onTapEditProfile(context);
+                      }),
+                  SizedBox(height: 30.v),
+                  Row(children: [
+                    CustomImageView(
+                        imagePath: ImageConstant.imgUser,
+                        height: 28.adaptSize,
+                        width: 28.adaptSize),
+                    Padding(
+                        padding: EdgeInsets.only(left: 20.h, top: 5.v),
+                        child: Text("First Name",
+                            style: CustomTextStyles.titleMediumSemiBold_1))
+                  ]),
+                  SizedBox(height: 15.v),
                   Row(children: [
                     CustomImageView(
                         imagePath: ImageConstant.imgUser,
@@ -87,7 +90,7 @@ class ProfilePage extends StatelessWidget {
                         child: Text("Last Name",
                             style: CustomTextStyles.titleMediumSemiBold_1))
                   ]),
-              SizedBox(height: 15.v),
+                  SizedBox(height: 15.v),
                   Row(children: [
                     CustomImageView(
                         imagePath: ImageConstant.imgUser,
@@ -99,19 +102,29 @@ class ProfilePage extends StatelessWidget {
                             style: CustomTextStyles.titleMediumSemiBold_1))
                   ]),
                   SizedBox(height: 15.v),
-
-                  Row(children: [
-                CustomImageView(
-                    imagePath: ImageConstant.imgRefresh,
-                    height: 28.adaptSize,
-                    width: 28.adaptSize),
-                Padding(
-                    padding: EdgeInsets.only(left: 20.h, top: 5.v),
-                    child: Text("Logout",
-                        style: CustomTextStyles.titleMediumRed400))
-              ]),
-              SizedBox(height: 5.v)
-            ])));
+                  GestureDetector(
+                    onTap: () {
+                      onTapSignOut(context);
+                    },
+                    child: Row(
+                      children: [
+                        CustomImageView(
+                          imagePath: ImageConstant.imgRefresh,
+                          height: 28.adaptSize,
+                          width: 28.adaptSize,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 20.h, top: 5.v),
+                          child: Text(
+                            "Logout",
+                            style: CustomTextStyles.titleMediumRed400,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 5.v)
+                ])));
   }
 
   /// Section Widget
@@ -159,7 +172,17 @@ class ProfilePage extends StatelessWidget {
     ]);
   }
 
+  onTapSignOut(BuildContext context) async {
+    try {
+      await StorageService().deleteAll();
 
+      Navigator.of(context, rootNavigator: true).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginPage()));
+    } catch (e) {
+      print('Error during sign out: $e');
+      // Handle errors as needed
+    }
+  }
 
   /// Opens a URL in the device's default web browser.
   ///
