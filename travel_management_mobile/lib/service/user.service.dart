@@ -23,6 +23,11 @@ class UserService {
     return null;
   }
 
+  Future<int> getUserId() async {
+    final Map<String, dynamic>? decodedToken = await decodeToken();
+    return decodedToken?['id'];
+  }
+
   Future<UserModel> getUserInfo() async {
     try {
       final Map<String, dynamic>? decodedToken = await decodeToken();

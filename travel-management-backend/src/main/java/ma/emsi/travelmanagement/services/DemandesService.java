@@ -1,6 +1,6 @@
 package ma.emsi.travelmanagement.services;
 
-import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import ma.emsi.travelmanagement.entities.Demande;
 import ma.emsi.travelmanagement.entities.User;
 import ma.emsi.travelmanagement.repository.DemandesRepository;
@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class DemandesService {
 
     @Autowired
@@ -30,7 +31,9 @@ public class DemandesService {
     }
 
     public Demande createDemandes(Demande demandes) {
-        Optional<User> user = userRepository.findByEmail(demandes.getDemandeur().getEmail());
+        log.info("demande {}",demandes.toString());
+        Optional<User> user = userRepository.findById(demandes.getDemandeur().getId());
+        log.info("user id {} toString {}",user.get().getId(),user.toString());
         if (user.isPresent()) {
             demandes.setDemandeur(user.get());
         } else {
@@ -49,16 +52,28 @@ public class DemandesService {
     }
 
     public Demande updateDemandes(int id, Demande updatedDemandes) {
-        if (demandesRepository.existsById(id)) {
-            updatedDemandes.setId(id);
-            return demandesRepository.save(updatedDemandes);
+        if (id > 0 && updatedDemandes != null) {
+            Optional<Demande> existingDemandes = demandesRepository.findById(id);
+            if (existingDemandes.isPresent()) {
+                Demande currentDemandes = existingDemandes.get();
+             
+                currentDemandes.setMotif(updatedDemandes.getMotif());
+                currentDemandes.setVille(updatedDemandes.getVille());
+                currentDemandes.setEtat(updatedDemandes.getEtat());
+                currentDemandes.setFrais(updatedDemandes.getFrais());
+                currentDemandes.setDateDebut(updatedDemandes.getDateDebut());
+                currentDemandes.setDateFin(updatedDemandes.getDateFin());
+                currentDemandes.setDemandeur(updatedDemandes.getDemandeur());
+                currentDemandes.setMoyenTransport(updatedDemandes.getMoyenTransport());
+               
+                return demandesRepository.save(currentDemandes);
+            }
         }
         return null;
     }
 
-    @Transactional
+
     public void deleteDemandes(int id) {
         demandesRepository.deleteById(id);
     }
 }
-

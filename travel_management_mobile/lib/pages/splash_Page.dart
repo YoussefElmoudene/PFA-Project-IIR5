@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:travel_management_mobile/core/utils/size_utils.dart';
+import 'package:travel_management_mobile/pages/bottom_navigation/home_screen_container_screen.dart';
 import 'package:travel_management_mobile/routes/app_routes.dart';
+import 'package:travel_management_mobile/service/storage.service.dart';
 
 import '../components/custom_image_view.dart';
 import '../core/utils/image_constant.dart';
@@ -28,10 +30,18 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> init() async {
-    Navigator.pushNamed(context, AppRoutes.loginScreen);
+    String? token = await StorageService().getToken();
+
+    if (token == null || token.isEmpty) {
+      Navigator.pushReplacementNamed(context, AppRoutes.loginScreen);
+    } else {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeContainerScreen(),
+          ));
+    }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +69,6 @@ class _SplashPageState extends State<SplashPage> {
     );
   }
 
-  /// Section Widget
   Widget _buildWelcomeSection(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 32.h),
