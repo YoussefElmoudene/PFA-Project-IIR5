@@ -9,7 +9,7 @@ import {LayoutComponent} from 'app/layout/layout.component';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 export const appRoutes: Route[] = [
 
-    // Redirect empty path to '/example'
+    // Redirect empty path to '/dashboard'
     {path: '', pathMatch : 'full', redirectTo: 'sign-out'},
 
     // Auth routes for guests
@@ -57,7 +57,8 @@ export const appRoutes: Route[] = [
         ]
     },
 
-    // Admin routes
+
+    //  routes
     {
         path: '',
         canActivate: [AuthGuard],
@@ -67,23 +68,18 @@ export const appRoutes: Route[] = [
             initialData: initialDataResolver
         },
         children: [
-            {path: 'admin/dashboard', loadChildren: () => import('app/modules/admin/example/example.routes')},
-        ]
-    },
-    // demandeur routes
-    {
-        path: 'demandeur',
-        canActivate: [AuthGuard],
-        canActivateChild: [AuthGuard],
-        component: LayoutComponent,
-        data: {
-            layout: 'enterprise'
-        },
-        resolve: {
-            initialData: initialDataResolver
-        },
-        children: [
-            {path: '', loadChildren: () => import('app/modules/demandeur/demandeur.routes')},
+            {path: 'demandeur',
+                data: {
+                    layout: 'enterprise'
+                },
+                loadChildren: () => import('app/modules/demandeur/demandeur.routes')
+            },
+            {path: 'admin',
+                data: {
+                    layout: 'classy'
+                },
+                loadChildren: () => import('app/modules/admin/admin.routes')
+            },
         ]
     }
 ];

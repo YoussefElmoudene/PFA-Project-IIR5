@@ -4,17 +4,16 @@ import {FuseNavigationItem} from '@fuse/components/navigation';
 export const defaultNavigation: FuseNavigationItem[] = [
     {
         id: 'home',
-        title: 'Home',
+        title: 'Dashboard',
         type: 'basic',
         icon: 'heroicons_outline:chart-pie',
-        link: '/demandeur/home'
-    },
-    {
-        id: 'demandes',
-        title: 'Demandes',
+        link: '/admin/home'
+    }, {
+        id: 'users',
+        title: 'Demandeurs',
         type: 'basic',
-        icon: 'heroicons_outline:chart-pie',
-        link: '/demandeur/demandes'
+        icon: 'heroicons_outline:users',
+        link: '/admin/users'
     }
 ];
 export const compactNavigation: FuseNavigationItem[] = [
@@ -40,13 +39,6 @@ export const futuristicNavigation: FuseNavigationItem[] = [
         type: 'basic',
         icon: 'heroicons_outline:chart-pie',
         link: '/demandeur/home'
-    },
-    {
-        id: 'demandes',
-        title: 'Demandes',
-        type: 'basic',
-        icon: 'heroicons_outline:chart-pie',
-        link: '/demandeur/demandes'
     }
 ];
 export const horizontalNavigation: FuseNavigationItem[] = [
@@ -56,12 +48,5 @@ export const horizontalNavigation: FuseNavigationItem[] = [
         type: 'basic',
         icon: 'heroicons_outline:chart-pie',
         link: '/demandeur/home'
-    },
-    {
-        id: 'demandes',
-        title: 'Demandes',
-        type: 'basic',
-        icon: 'heroicons_outline:chart-pie',
-        link: '/demandeur/demandes'
     }
 ];

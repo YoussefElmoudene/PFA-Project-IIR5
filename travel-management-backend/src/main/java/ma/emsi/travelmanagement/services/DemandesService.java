@@ -1,5 +1,6 @@
 package ma.emsi.travelmanagement.services;
 
+import jakarta.transaction.Transactional;
 import ma.emsi.travelmanagement.entities.Demande;
 import ma.emsi.travelmanagement.entities.User;
 import ma.emsi.travelmanagement.repository.DemandesRepository;
@@ -44,6 +45,7 @@ public class DemandesService {
         return null;
     }
 
+    @Transactional
     public void deleteDemandes(int id) {
         demandesRepository.deleteById(id);
     }

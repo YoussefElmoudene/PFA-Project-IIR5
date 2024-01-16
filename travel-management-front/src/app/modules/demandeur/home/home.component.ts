@@ -17,6 +17,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {CreateDemandeComponent} from "./create-demande/create-demande.component";
 import {DemandeService} from "../../../controller/service/demande.service";
 import {Demande} from "../../../controller/model/demande.model";
+import {MatMenuModule} from "@angular/material/menu";
 
 @Component({
     selector: 'app-home',
@@ -26,9 +27,10 @@ import {Demande} from "../../../controller/model/demande.model";
         , MatOptionModule, NgFor, MatIconModule, MatInputModule,
         MatSlideToggleModule, NgIf, NgClass, MatTooltipModule,
         MatProgressBarModule, MatButtonModule, RouterLink,
-        FuseFindByKeyPipe, PercentPipe, I18nPluralPipe, FormsModule, DatePipe],
+        FuseFindByKeyPipe, PercentPipe, I18nPluralPipe, FormsModule, DatePipe, MatMenuModule],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent
+    implements OnInit {
     startTime = new Date()
     endTime = new Date()
 
