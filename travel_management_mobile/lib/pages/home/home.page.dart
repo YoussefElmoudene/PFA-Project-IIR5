@@ -10,6 +10,8 @@ import 'package:travel_management_mobile/core/utils/image_constant.dart';
 import 'package:travel_management_mobile/core/utils/size_utils.dart';
 import 'package:travel_management_mobile/model/demande.model.dart';
 import 'package:travel_management_mobile/model/user.model.dart';
+import 'package:travel_management_mobile/pages/home/components/filter_dialog.dart';
+import 'package:travel_management_mobile/pages/home/components/status_icon.dart';
 import 'package:travel_management_mobile/service/demande.service.dart';
 import 'package:travel_management_mobile/service/storage.service.dart';
 import 'package:travel_management_mobile/service/user.service.dart';
@@ -43,15 +45,31 @@ class HomePageState extends State<HomePage>
   TextEditingController MotifController = TextEditingController();
   List<Demande> demandes = [];
   int userId = 1;
+  String selectedEtat = '';
+  String role = '';
   @override
   void initState() {
     super.initState();
     init();
+    // StorageService().deleteAll();
   }
 
   Future<void> init() async {
     userId = await _userService.getUserId();
-    demandes = await _demandeService.getDemandesByUser();
+    role = await _userService.getUserRole();
+    print("role user $role");
+    if (role == 'ADMIN' && selectedEtat.isNotEmpty) {
+      demandes = await _demandeService
+          .filterDemandesByEtatAndCurrentUser(selectedEtat);
+    } else {
+      if (selectedEtat.isEmpty) {
+        demandes = await _demandeService.getDemandesByUser();
+      } else {
+        demandes = await _demandeService
+            .filterDemandesByEtatAndCurrentUser(selectedEtat);
+      }
+    }
+
     setState(() {});
   }
 
@@ -72,7 +90,16 @@ class HomePageState extends State<HomePage>
               onTap: () {}),
           AppbarTrailingImage(
               imagePath: ImageConstant.imgClock,
-              margin: EdgeInsets.only(left: 20.h, top: 11.v, right: 35.h))
+              margin: EdgeInsets.only(left: 20.h, top: 11.v, right: 35.h)),
+          IconButton(
+            icon: Icon(
+              Icons.filter_list,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              showFilterDialog(context);
+            },
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -140,7 +167,7 @@ class HomePageState extends State<HomePage>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  " $dateStart - $dateEnd",
+                  " $dateStart -> $dateEnd",
                   style: theme.textTheme.titleLarge,
                 ),
                 SizedBox(height: 12.v),
@@ -215,14 +242,37 @@ class HomePageState extends State<HomePage>
               ),
               Padding(
                 padding: EdgeInsets.only(right: 8.0),
-                child: CustomElevatedButton(
-                  height: 24.v,
-                  width: 60.h,
-                  text: "Status",
-                  buttonStyle: CustomButtonStyles.fillTeal,
-                  buttonTextStyle: CustomTextStyles.labelMediumCyan300,
+                child: Row(
+                  children: [
+                    StatusIcons(status: demande.etat),
+                    SizedBox(width: 8.0),
+                    Visibility(
+                      visible: role == 'ADMIN',
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.check,
+                          color: Colors.green,
+                        ),
+                        onPressed: () {
+                          showConfirmationDialog(context, demande, 'COMPLETED');
+                        },
+                      ),
+                    ),
+                    Visibility(
+                      visible: role == 'ADMIN',
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.remove,
+                          color: Colors.red,
+                        ),
+                        onPressed: () {
+                          showConfirmationDialog(context, demande, 'CANCELED');
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              )
+              ),
             ],
           ),
           SizedBox(height: 19.v),
@@ -236,13 +286,13 @@ class HomePageState extends State<HomePage>
                   text: "Delete",
                   margin: EdgeInsets.only(right: 6.h),
                   onPressed: () {
-                    _deleteDemande(demande);
+                    deleteDemande(demande);
                   },
                 ),
               ),
               Expanded(
                 child: CustomElevatedButton(
-                  height: 78.v,
+                  height: 44.v,
                   text: "Update",
                   margin: EdgeInsets.only(left: 6.h),
                   buttonStyle: CustomButtonStyles.fillPrimaryTL19,
@@ -339,7 +389,7 @@ class HomePageState extends State<HomePage>
                     height: 38.0,
                     text: "Save",
                     onPressed: () async {
-                      _addDemandeToService(context);
+                      addDemandeToService(context);
                     },
                   ),
                 )
@@ -351,7 +401,7 @@ class HomePageState extends State<HomePage>
     );
   }
 
-  void _addDemandeToService(BuildContext context) async {
+  void addDemandeToService(BuildContext context) async {
     try {
       print("user id $userId");
       UserModel us = new UserModel(id: userId);
@@ -360,7 +410,7 @@ class HomePageState extends State<HomePage>
           id: 0,
           motif: MotifController.text,
           ville: cityController.text,
-          etat: "En_COURS",
+          etat: "PENDING",
           frais: double.parse(amountController.text),
           dateDebut: DateTime.parse(dateStartController.text),
           dateFin: DateTime.parse(dateEndController.text),
@@ -390,8 +440,9 @@ class HomePageState extends State<HomePage>
     }
   }
 
-  void _deleteDemande(Demande demande) async {
+  void deleteDemande(Demande demande) async {
     try {
+      print(demande.id);
       await _demandeService.deleteDemandes(demande.id);
       init();
       ToastUtils.showErrorToast(context, 'Done', 'Item Deleted Successfully');
@@ -449,7 +500,7 @@ class HomePageState extends State<HomePage>
                   height: 38.0,
                   text: "Update",
                   onPressed: () {
-                    _updateDemandeInService(context, demande.id);
+                    updateDemandeInService(context, demande.id);
                   },
                 ),
               )
@@ -460,7 +511,7 @@ class HomePageState extends State<HomePage>
     );
   }
 
-  void _updateDemandeInService(BuildContext context, int id) async {
+  void updateDemandeInService(BuildContext context, int id) async {
     try {
       UserModel us = new UserModel(id: userId);
       if (_validateInputs()) {
@@ -499,6 +550,66 @@ class HomePageState extends State<HomePage>
         'Error',
         'Failed to update item. Please try again.',
       );
+    }
+  }
+
+  void showFilterDialog(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return FilterDialog(
+          etatOptions: ['PENDING', 'COMPLETED', 'CANCELED'],
+          onFilterSelected: (selected) async {
+            setState(() {
+              selectedEtat = selected;
+            });
+            await init();
+          },
+        );
+      },
+    );
+  }
+
+  void showConfirmationDialog(
+      BuildContext context, Demande demande, String etat) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Validation'),
+          content: Text('Do you want to $etat this demande?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                validateDemande(demande, etat);
+                Navigator.of(context).pop();
+              },
+              child: Text('Validate'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void validateDemande(Demande demande, String etat) async {
+    try {
+      final response =
+          await DemandeService().updateDemandeEtat(demande.id, etat);
+      if (response) {
+        print('Demande etat updated successfully');
+        init();
+      } else {
+        print('Failed to update demande etat');
+      }
+    } catch (e) {
+      print('Error updating demande etat: $e');
     }
   }
 }

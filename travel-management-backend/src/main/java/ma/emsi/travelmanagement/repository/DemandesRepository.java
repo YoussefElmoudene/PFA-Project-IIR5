@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface DemandesRepository extends JpaRepository<Demande, Integer> {
     List<Demande> findByDemandeur(User user);
+
+    List<Demande> findByDemandeurAndEtat(User user,String etat);
 }
