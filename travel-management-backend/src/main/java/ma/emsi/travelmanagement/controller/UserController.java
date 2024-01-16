@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("users")
 public class UserController {
 
     @Autowired
@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @GetMapping("/role/{role}")
-    public List<User> findByRole(Role role) {
-        return userService.findByRole(role);
+    public List<User> findByRole(@PathVariable String role) {
+        return userService.findByRole(Role.valueOf(role));
     }
 }
