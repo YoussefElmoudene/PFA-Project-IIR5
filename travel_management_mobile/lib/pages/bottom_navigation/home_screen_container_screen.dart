@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:travel_management_mobile/pages/home/home.page.dart';
 import 'package:travel_management_mobile/pages/profile_settings_page/profile_settings_page.dart';
 
 import '../../components/custom_bottom_bar.dart';
@@ -17,15 +17,15 @@ class HomeContainerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
-    return  Scaffold(
-            body: Navigator(
-                key: navigatorKey,
-                initialRoute: AppRoutes.homeScreen,
-                onGenerateRoute: (routeSetting) => PageRouteBuilder(
-                    pageBuilder: (ctx, ani, ani1) =>
-                        getCurrentPage(routeSetting.name!),
-                    transitionDuration: Duration(seconds: 0))),
-            bottomNavigationBar: _buildBottomBar(context));
+    return Scaffold(
+        body: Navigator(
+            key: navigatorKey,
+            initialRoute: AppRoutes.homeScreen,
+            onGenerateRoute: (routeSetting) => PageRouteBuilder(
+                pageBuilder: (ctx, ani, ani1) =>
+                    getCurrentPage(routeSetting.name!),
+                transitionDuration: Duration(seconds: 0))),
+        bottomNavigationBar: _buildBottomBar(context));
   }
 
   /// Section Widget
@@ -53,7 +53,7 @@ class HomeContainerScreen extends StatelessWidget {
   Widget getCurrentPage(String currentRoute) {
     switch (currentRoute) {
       case AppRoutes.homeScreen:
-        return HomeScreenPage();
+        return HomePage();
       case AppRoutes.operations:
         return BookingOngoingPage();
       case AppRoutes.profileScreen:

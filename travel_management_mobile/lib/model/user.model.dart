@@ -1,22 +1,22 @@
 class UserModel {
   int id;
-  String firstName;
-  String lastName;
-  String username;
-  String password;
-  String tel;
-  String email;
-  String role;
+  String? firstName;
+  String? lastName;
+  String? username;
+  String? password;
+  String? tel;
+  String? email;
+  String? role;
 
   UserModel({
     required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.username,
-    required this.password,
-    required this.tel,
-    required this.email,
-    required this.role,
+    this.firstName,
+    this.lastName,
+    this.username,
+    this.password,
+    this.tel,
+    this.email,
+    this.role,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {

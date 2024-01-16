@@ -1,5 +1,6 @@
 package ma.emsi.travelmanagement.services;
 
+import lombok.extern.slf4j.Slf4j;
 import ma.emsi.travelmanagement.entities.Demande;
 import ma.emsi.travelmanagement.entities.User;
 import ma.emsi.travelmanagement.repository.DemandesRepository;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class DemandesService {
 
     @Autowired
@@ -29,7 +31,9 @@ public class DemandesService {
     }
 
     public Demande createDemandes(Demande demandes) {
-        Optional<User> user = userRepository.findByEmail(demandes.getDemandeur().getEmail());
+        log.info("demande {}",demandes.toString());
+        Optional<User> user = userRepository.findById(demandes.getDemandeur().getId());
+        log.info("user id {} toString {}",user.get().getId(),user.toString());
         if (user.isPresent()) {
             demandes.setDemandeur(user.get());
         } else {
