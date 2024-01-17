@@ -19,6 +19,7 @@ import '../../service/firebaseService.dart';
 import '../../service/user.service.dart';
 import '../../theme/custom_text_style.dart';
 import '../../theme/theme_helper.dart';
+import '../../toasts/toast_notifications.dart';
 import '../home/components/status_icon.dart';
 
 class BookingOngoingPage extends StatefulWidget {
@@ -32,7 +33,8 @@ class BookingOngoingPageState extends State<BookingOngoingPage>
     with AutomaticKeepAliveClientMixin<BookingOngoingPage> {
   @override
   bool get wantKeepAlive => true;
-  final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
+  final DateFormat _dateFormat = DateFormat('EE MMM yy');
+
   List<Demande> demandes = [];
 
   TextEditingController searchController = TextEditingController();
@@ -98,13 +100,16 @@ class BookingOngoingPageState extends State<BookingOngoingPage>
           child: SingleChildScrollView(
             child: Column(
               children: [
-                CustomSearchView(
-                  controller: searchController,
-                  hintText: "Search",
-                  onChanged: (text) {
-                    print("Search text changed: $text");
-                    onSearchTextChanged(text);
-                  },                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  child: CustomSearchView(
+                    controller: searchController,
+                    hintText: "Search",
+                    onChanged: (text)  {
+                      onSearchTextChanged(text);
+                    },
+                  ),
+                ),
                 SizedBox(height: 20.v),
                 // Use the filtered demands list for the ListView
                 ListView.separated(
@@ -147,7 +152,7 @@ class BookingOngoingPageState extends State<BookingOngoingPage>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  " $dateStart -> $dateEnd",
+                  " $dateStart - $dateEnd",
                   style: theme.textTheme.titleLarge,
                 ),
                 SizedBox(height: 12.v),
@@ -237,17 +242,42 @@ class BookingOngoingPageState extends State<BookingOngoingPage>
   }
 
 
-  void onSearchTextChanged(String text) {
-    demandes = List.from(demandes);
+  // void onSearchTextChanged(String text) {
+  //   demandes = List.from(demandes);
+  //
+  //   if (text.isNotEmpty) {
+  //     demandes = demandes.where((demande) {
+  //       return
+  //         demande.frais.toString().toLowerCase().contains(text.toLowerCase()) ||
+  //             demande.ville.toLowerCase().contains(text.toLowerCase()) ||
+  //             demande.etat.toLowerCase().contains(text.toLowerCase()) ||
+  //             demande.moyenTransport.toLowerCase().contains(text.toLowerCase());
+  //     }).toList();
+  //   }
+  //   setState(() {});
+  // }
 
+  Future<void> onSearchTextChanged(String text) async {
     if (text.isNotEmpty) {
       demandes = demandes.where((demande) {
-        return
-          demande.frais.toString().toLowerCase().contains(text.toLowerCase()) ||
-              demande.ville.toLowerCase().contains(text.toLowerCase()) ||
-              demande.etat.toLowerCase().contains(text.toLowerCase()) ||
-              demande.moyenTransport.toLowerCase().contains(text.toLowerCase());
+        return demande.frais.toString().toLowerCase().contains(text.toLowerCase()) ||
+            demande.ville.toLowerCase().contains(text.toLowerCase()) ||
+            demande.etat.toLowerCase().contains(text.toLowerCase()) ||
+            demande.moyenTransport.toLowerCase().contains(text.toLowerCase());
       }).toList();
+    } else {
+      if (role == 'ADMIN') {
+        demandes = await _demandeService.getAllDemandes();
+      } else {
+        if (selectedEtat.isEmpty) {
+          demandes = await _demandeService.getDemandesByUser();
+        } else {
+          demandes = await _demandeService.filterDemandesByEtatAndCurrentUser(selectedEtat);
+        }
+      }
+    }
+    if (demandes.isEmpty) {
+      ToastUtils.showErrorToast(context, 'Oops', "No results found for '$text'");
     }
     setState(() {});
   }

@@ -37,7 +37,7 @@ class HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin<HomePage> {
   @override
   bool get wantKeepAlive => true;
-  final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
+  final DateFormat _dateFormat = DateFormat('EE MMM yy');
   late Future<UserModel> _userDataFuture;
 
   final DemandeService _demandeService = DemandeService();
@@ -208,7 +208,7 @@ class HomePageState extends State<HomePage>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  " $dateStart -> $dateEnd",
+                  " $dateStart - $dateEnd",
                   style: theme.textTheme.titleLarge,
                 ),
                 SizedBox(height: 12.v),
