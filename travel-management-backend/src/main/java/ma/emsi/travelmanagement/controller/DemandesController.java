@@ -52,14 +52,14 @@ public class DemandesController {
         return new ResponseEntity<>(createdDemandes, HttpStatus.CREATED);
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Demande> updateDemandes(@PathVariable int id, @RequestBody Demande updatedDemandes) {
         Demande updatedEntity = demandesService.updateDemandes(id, updatedDemandes);
         return updatedEntity != null ? new ResponseEntity<>(updatedEntity, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteDemandes(@PathVariable int id) {
         demandesService.deleteDemandes(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

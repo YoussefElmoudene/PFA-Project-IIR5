@@ -65,8 +65,7 @@ class HomePageState extends State<HomePage>
     role = await _userService.getUserRole();
     print("role user $role");
     if (role == 'ADMIN' && selectedEtat.isNotEmpty) {
-      demandes = await _demandeService
-          .filterDemandesByEtatAndCurrentUser(selectedEtat);
+      demandes = await _demandeService.filterDemandesByEtatAndCurrentUser(selectedEtat);
     } else {
       if (selectedEtat.isEmpty) {
         demandes = await _demandeService.getDemandesByUser();
@@ -75,7 +74,6 @@ class HomePageState extends State<HomePage>
             .filterDemandesByEtatAndCurrentUser(selectedEtat);
       }
     }
-
     setState(() {});
   }
 
