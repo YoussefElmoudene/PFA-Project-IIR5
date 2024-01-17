@@ -33,11 +33,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool isSelectedSwitch = false;
   late Future<UserModel> _userDataFuture;
 
+
   @override
   void initState() {
     super.initState();
+    init();
+
+  }
+
+
+  Future<void> init() async {
     _userDataFuture = UserService().getUserInfo();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -190,11 +198,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               width: 114.h,
               text: 'update',
               onPressed: () async {
-                await UserService().updateProfile(
+                 await UserService().updateProfile(
                   firstNameController.text,
                   lastNameController.text,
                   phoneController.text,
                 );
+                setState(() {
+                  init();
+                });
                 Navigator.pop(context);
               },
             ),

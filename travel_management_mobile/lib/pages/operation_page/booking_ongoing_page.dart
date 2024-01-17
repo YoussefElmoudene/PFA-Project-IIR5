@@ -78,7 +78,7 @@ class BookingOngoingPageState extends State<BookingOngoingPage>
             margin: EdgeInsets.only(left: 24.h, top: 9.v, bottom: 9.v),
           ),
           title: AppbarTitle(
-            text: "Demands",
+            text: "My Demands",
             margin: EdgeInsets.only(left: 16.h),
           ),
           actions: [
@@ -147,7 +147,7 @@ class BookingOngoingPageState extends State<BookingOngoingPage>
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -181,13 +181,19 @@ class BookingOngoingPageState extends State<BookingOngoingPage>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 4.0),
+                padding: EdgeInsets.only(left: 8.0),
                 child: Row(
                   children: [
+                    CustomImageView(
+                      imagePath: AppIcons.imgPrimary,
+                      height: 20.adaptSize,
+                      width: 20.adaptSize,
+                      margin: EdgeInsets.symmetric(vertical: 2.v),
+                    ),
                     Padding(
                       padding: EdgeInsets.only(left: 4.h),
                       child: Text(
-                        "City : $city",
+                        " : $city",
                         style: theme.textTheme.titleSmall,
                       ),
                     ),
@@ -226,7 +232,7 @@ class BookingOngoingPageState extends State<BookingOngoingPage>
                 ],
               ),
               Padding(
-                padding: EdgeInsets.only(right: 8.0),
+                padding: EdgeInsets.only(left: 22.0),
                 child: Row(
                   children: [
                     StatusIcons(status: demande.etat),

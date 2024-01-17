@@ -237,13 +237,19 @@ class HomePageState extends State<HomePage>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 4.0),
+                padding: EdgeInsets.only(left: 8.0),
                 child: Row(
                   children: [
+                    CustomImageView(
+                      imagePath: AppIcons.imgPrimary,
+                      height: 20.adaptSize,
+                      width: 20.adaptSize,
+                      margin: EdgeInsets.symmetric(vertical: 2.v),
+                    ),
                     Padding(
                       padding: EdgeInsets.only(left: 4.h),
                       child: Text(
-                        "City : $city",
+                        " : $city",
                         style: theme.textTheme.titleSmall,
                       ),
                     ),
@@ -282,7 +288,7 @@ class HomePageState extends State<HomePage>
                 ],
               ),
               Padding(
-                padding: EdgeInsets.only(right: 8.0),
+                padding: EdgeInsets.only(left: 4.h),
                 child: Row(
                   children: [
                     StatusIcons(status: demande.etat),

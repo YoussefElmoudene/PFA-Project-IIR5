@@ -18,4 +18,5 @@ class AppIcons {
   static const String imgCut = 'assets/images/img_cut.svg';
   static const String imgInfo = 'assets/images/img_info.svg';
   static const String imgGlobe = 'assets/images/img_globe.svg';
+  static const String imgPrimary = 'assets/images/img_frame_primary.svg';
 }
