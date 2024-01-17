@@ -12,6 +12,7 @@ import 'package:travel_management_mobile/model/demande.model.dart';
 import 'package:travel_management_mobile/model/user.model.dart';
 import 'package:travel_management_mobile/pages/home/components/filter_dialog.dart';
 import 'package:travel_management_mobile/pages/home/components/status_icon.dart';
+import 'package:travel_management_mobile/service/authentification.service.dart';
 import 'package:travel_management_mobile/service/demande.service.dart';
 import 'package:travel_management_mobile/service/storage.service.dart';
 import 'package:travel_management_mobile/service/user.service.dart';
@@ -22,6 +23,8 @@ import 'package:travel_management_mobile/theme/theme_helper.dart';
 import 'package:travel_management_mobile/toasts/toast_notifications.dart';
 import 'package:travel_management_mobile/components/custom_elevated_button.dart';
 import 'package:travel_management_mobile/components/custom_outlined_button.dart';
+
+import '../login_Page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -35,6 +38,8 @@ class HomePageState extends State<HomePage>
   @override
   bool get wantKeepAlive => true;
   final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
+  late Future<UserModel> _userDataFuture;
+
   final DemandeService _demandeService = DemandeService();
   final UserService _userService = UserService();
   TextEditingController dateStartController = TextEditingController();
@@ -50,6 +55,7 @@ class HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
+    _userDataFuture = UserService().getUserInfo();
     init();
     // StorageService().deleteAll();
   }
@@ -85,9 +91,11 @@ class HomePageState extends State<HomePage>
         title: AppbarTitle(text: "Home", margin: EdgeInsets.only(left: 16.h)),
         actions: [
           AppbarTrailingImage(
-              imagePath: ImageConstant.imgIcons,
+              imagePath: ImageConstant.imgRefresh,
               margin: EdgeInsets.only(left: 24.h, top: 11.v, right: 11.h),
-              onTap: () {}),
+            onTap: () async {
+              onTapSignOut(context);
+            },),
           AppbarTrailingImage(
               imagePath: ImageConstant.imgClock,
               margin: EdgeInsets.only(left: 20.h, top: 11.v, right: 35.h)),
@@ -105,6 +113,39 @@ class HomePageState extends State<HomePage>
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SizedBox(
+              width: double.maxFinite,
+              child: Column(
+                children: [
+                  SizedBox(height: 10.v),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 10.h),
+                      child: FutureBuilder<UserModel>(
+                        future: _userDataFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Center(child: Text('Error: ${snapshot.error}'));
+                          } else if (!snapshot.hasData || snapshot.data == null) {
+                            return Center(child: Text('User data not available'));
+                          } else {
+                            final userData = snapshot.data as UserModel;
+                            return Text(
+                                userData != null ? "Hello, ${userData.firstName} 👋" : "Hello,👋",
+                              style: theme.textTheme.headlineLarge,
+                            );
+                          }
+                        }
+
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             SizedBox(height: 30.0),
             Align(
               alignment: Alignment.centerRight,
@@ -153,16 +194,18 @@ class HomePageState extends State<HomePage>
     String city = demande.ville;
     String vehicle = demande.moyenTransport;
 
-    return Container(
-      padding: EdgeInsets.all(10.h),
-      decoration: AppDecoration.outlineBlackC.copyWith(
-        borderRadius: BorderRadiusStyle.roundedBorder16,
-      ),
+    return  Center( child: Container(
+    margin: EdgeInsets.only(right: 20.0),
+    padding: EdgeInsets.symmetric(vertical: 5.v, horizontal: 5.v),
+    decoration: AppDecoration.outlineBlackC.copyWith(
+    borderRadius: BorderRadiusStyle.roundedBorder16,
+    ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: EdgeInsets.only(right: 8.h),
+            padding: EdgeInsets.all(10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -251,7 +294,7 @@ class HomePageState extends State<HomePage>
                       child: IconButton(
                         icon: Icon(
                           Icons.check,
-                          color: Colors.green,
+                          color: Colors.teal,
                         ),
                         onPressed: () {
                           showConfirmationDialog(context, demande, 'COMPLETED');
@@ -283,6 +326,7 @@ class HomePageState extends State<HomePage>
             children: [
               Expanded(
                 child: CustomOutlinedButton(
+                  height: 44.v,
                   text: "Delete",
                   margin: EdgeInsets.only(right: 6.h),
                   onPressed: () {
@@ -306,7 +350,7 @@ class HomePageState extends State<HomePage>
           ),
         ],
       ),
-    );
+    ));
   }
 
   void _showAddDemandeModal(BuildContext context) {
@@ -418,6 +462,7 @@ class HomePageState extends State<HomePage>
           moyenTransport: vehicleController.text,
         );
 
+
         await _demandeService.createDemandes(newDemande);
         init();
         Navigator.pop(context);
@@ -493,6 +538,44 @@ class HomePageState extends State<HomePage>
                 },
                 controller: dateStartController,
                 decoration: InputDecoration(labelText: 'Date Start'),
+                style: TextStyle(color: Colors.black),
+
+              ),
+              TextFormField(
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: demande.dateFin,
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101),
+                  );
+                  if (pickedDate != null) {
+                    dateEndController.text = _dateFormat.format(pickedDate);
+                  }
+                },
+                controller: dateEndController,
+                decoration: InputDecoration(labelText: 'Date End'),
+                style: TextStyle(color: Colors.black),
+              ),
+              TextFormField(
+                controller: amountController,
+                decoration: InputDecoration(labelText: 'Amount'),
+                style: TextStyle(color: Colors.black),
+              ),
+              TextFormField(
+                controller: cityController,
+                decoration: InputDecoration(labelText: 'City'),
+                style: TextStyle(color: Colors.black),
+              ),
+              TextFormField(
+                controller: vehicleController,
+                decoration: InputDecoration(labelText: 'Vehicle'),
+                style: TextStyle(color: Colors.black),
+              ),
+              TextFormField(
+                controller: MotifController,
+                decoration: InputDecoration(labelText: 'Motif'),
+                style: TextStyle(color: Colors.black),
               ),
               SizedBox(height: 16.0),
               Center(
@@ -519,7 +602,7 @@ class HomePageState extends State<HomePage>
           id: 0,
           motif: MotifController.text,
           ville: cityController.text,
-          etat: "En_COURS",
+          etat: "PENDING",
           frais: double.parse(amountController.text),
           dateDebut: DateTime.parse(dateStartController.text),
           dateFin: DateTime.parse(dateEndController.text),
@@ -527,7 +610,7 @@ class HomePageState extends State<HomePage>
           moyenTransport: vehicleController.text,
         );
 
-        await _demandeService.updateDemandes(1, updatedDemande);
+        await _demandeService.updateDemandes(id, updatedDemande);
         init();
         Navigator.pop(context);
         ToastUtils.showUpdateToast(
@@ -610,6 +693,19 @@ class HomePageState extends State<HomePage>
       }
     } catch (e) {
       print('Error updating demande etat: $e');
+    }
+  }
+
+
+  onTapSignOut(BuildContext context) async {
+    try {
+      await StorageService().deleteAll();
+
+      Navigator.of(context, rootNavigator: true).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginPage()));
+    } catch (e) {
+      print('Error during sign out: $e');
+      // Handle errors as needed
     }
   }
 }

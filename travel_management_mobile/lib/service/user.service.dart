@@ -44,7 +44,7 @@ class UserService {
           'Content-Type': 'application/json',
         };
         final response = await http.get(
-          Uri.parse('${ApiUrl.springUrl}/api/users/$userId'),
+          Uri.parse('${ApiUrl.springUrl}/users/$userId'),
           headers: headers,
         );
         if (response.statusCode == 200) {
@@ -70,7 +70,7 @@ class UserService {
       };
 
       final response = await http.get(
-        Uri.parse('${ApiUrl.springUrl}/api/user/'),
+        Uri.parse('${ApiUrl.springUrl}/users/'),
         headers: headers,
       );
 
@@ -96,7 +96,7 @@ class UserService {
       };
 
       final response = await http.get(
-        Uri.parse('${ApiUrl.springUrl}/api/user/$id'),
+        Uri.parse('${ApiUrl.springUrl}/users/$id'),
         headers: headers,
       );
 
@@ -121,7 +121,7 @@ class UserService {
       };
 
       final response = await http.post(
-        Uri.parse('${ApiUrl.springUrl}/api/user/save'),
+        Uri.parse('${ApiUrl.springUrl}/users/save'),
         headers: headers,
         body: json.encode(user.toJson()),
       );
@@ -147,7 +147,7 @@ class UserService {
       };
 
       final response = await http.delete(
-        Uri.parse('${ApiUrl.springUrl}/api/user/$id'),
+        Uri.parse('${ApiUrl.springUrl}/users/$id'),
         headers: headers,
       );
 
@@ -209,7 +209,7 @@ class UserService {
       };
 
       final response = await http.get(
-        Uri.parse('${ApiUrl.springUrl}/api/user/username/$username'),
+        Uri.parse('${ApiUrl.springUrl}/users/username/$username'),
         headers: headers,
       );
 
@@ -234,7 +234,7 @@ class UserService {
       };
 
       final response = await http.get(
-        Uri.parse('${ApiUrl.springUrl}/api/user/email/$email'),
+        Uri.parse('${ApiUrl.springUrl}/users/email/$email'),
         headers: headers,
       );
 
@@ -259,7 +259,7 @@ class UserService {
       };
 
       final response = await http.get(
-        Uri.parse('${ApiUrl.springUrl}/api/user/role/$role'),
+        Uri.parse('${ApiUrl.springUrl}/users/role/$role'),
         headers: headers,
       );
 
