@@ -37,7 +37,9 @@ class HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin<HomePage> {
   @override
   bool get wantKeepAlive => true;
-  final DateFormat _dateFormat = DateFormat('EE MMM yy');
+  final DateFormat _dateFormat2 = DateFormat('EE MMM yy');
+  final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
+
   late Future<UserModel> _userDataFuture;
 
   final DemandeService _demandeService = DemandeService();
@@ -64,8 +66,10 @@ class HomePageState extends State<HomePage>
     userId = await _userService.getUserId();
     role = await _userService.getUserRole();
     print("role user $role");
-    if (role == 'ADMIN' && selectedEtat.isNotEmpty) {
-      demandes = await _demandeService.filterDemandesByEtatAndCurrentUser(selectedEtat);
+    if (role == 'ADMIN' ) {
+      // demandes = await _demandeService.filterDemandesByEtatAndCurrentUser(selectedEtat);
+      demandes = await _demandeService.getAllDemandes();
+
     } else {
       if (selectedEtat.isEmpty) {
         demandes = await _demandeService.getDemandesByUser();
@@ -186,8 +190,8 @@ class HomePageState extends State<HomePage>
   }
 
   Widget _buildDemandeItem(BuildContext context, Demande demande) {
-    String dateStart = _dateFormat.format(demande.dateDebut);
-    String dateEnd = _dateFormat.format(demande.dateFin);
+    String dateStart = _dateFormat2.format(demande.dateDebut);
+    String dateEnd = _dateFormat2.format(demande.dateFin);
     String amount = demande.frais.toString();
     String city = demande.ville;
     String vehicle = demande.moyenTransport;
