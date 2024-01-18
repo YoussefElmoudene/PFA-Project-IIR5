@@ -81,7 +81,9 @@ public class DemandesController {
 
 
     @GetMapping("/filterByEtat")
-    public ResponseEntity<List<Demande>> filterDemandesByEtatAndUser(@RequestParam(value = "etat") String etat, @RequestParam(value = "id") int id) {
+    public ResponseEntity<List<Demande>> filterDemandesByEtatAndUser(
+            @RequestParam(value = "etat") String etat,
+            @RequestParam(value = "id") int id) {
         Optional<User> user = userService.findById(id);
         List<Demande> demandesList = demandesService.filterUserDemandesByEtat(user.get(), etat);
         return new ResponseEntity<>(demandesList, HttpStatus.OK);

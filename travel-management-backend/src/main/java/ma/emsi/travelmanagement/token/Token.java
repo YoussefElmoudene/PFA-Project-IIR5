@@ -2,7 +2,10 @@ package ma.emsi.travelmanagement.token;
 
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ma.emsi.travelmanagement.entities.User;
 
 @Data
