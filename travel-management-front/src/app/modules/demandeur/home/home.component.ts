@@ -31,6 +31,7 @@ import {AuthService} from "../../../core/auth/auth.service";
         FuseFindByKeyPipe, PercentPipe, I18nPluralPipe, FormsModule, DatePipe, MatMenuModule],
 })
 export class HomeComponent implements OnInit {
+    selectedType: string = 'all'
 
     constructor(public dialog: MatDialog,
                 private auth: AuthService,
@@ -47,6 +48,10 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.fetch_data();
+    }
+
+    private fetch_data() {
         this.demandeService.findByUser(this.auth._user?.email).subscribe(res => {
             this.demandes = res
         })
@@ -58,5 +63,25 @@ export class HomeComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
 
         });
+    }
+
+    filterByType() {
+        console.log(this.selectedType)
+        if (this.selectedType === 'all') {
+            this.fetch_data()
+        } else {
+            this.demandeService.findByDemandeurAndEtat(this.selectedType, this.auth._user?.id)
+                .subscribe(res => {
+                    this.demandes = res
+                })
+        }
+    }
+
+    delete(demande: Demande) {
+        this.demandeService.delete(demande.id)
+            .subscribe(res => {
+                const index = this.demandes.indexOf(demande)
+                this.demandes.splice(index, 1)
+            })
     }
 }

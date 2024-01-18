@@ -39,4 +39,8 @@ export class UserService {
                 console.error(error)
             })
     }
+
+    delete(id: number) {
+        return this.http.delete<void>(this.url + id)
+    }
 }

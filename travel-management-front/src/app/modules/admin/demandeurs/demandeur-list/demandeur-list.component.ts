@@ -71,4 +71,14 @@ export class DemandeurListComponent implements OnInit {
             this.userService.findByRole(Role.ROLE_DEMANDEUR)
         }
     }
+
+    supprimer(item: User) {
+        this.userService.delete(item.id)
+            .subscribe(res => {
+                const index = this.demandeurs.indexOf(item)
+                this.demandeurs.splice(index, 1)
+            }, error => {
+                console.error(error)
+            })
+    }
 }

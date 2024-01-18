@@ -35,9 +35,9 @@
                     <mat-select [(ngModel)]="selectedType" name="selectedType"
                                 (ngModelChange)="filterByType()">
                         <mat-option [value]="'all'">Tous</mat-option>
-                        <mat-option [value]="'accepter'">accepter</mat-option>
-                        <mat-option [value]="'rejeter'">rejeter</mat-option>
-                        <mat-option [value]="'coming'">en cours de traitement</mat-option>
+                        <mat-option [value]="'COMPLETED'">accepter</mat-option>
+                        <mat-option [value]="'CANCELED'">rejeter</mat-option>
+                        <mat-option [value]="'PENDING'">en cours de traitement</mat-option>
                     </mat-select>
                 </mat-form-field>
 
@@ -60,22 +60,22 @@
                                 </ng-container>
                                 <!-- Completed at least once -->
                                 <div class="flex items-center">
-                                    <ng-container *ngIf="demande?.etat?.includes('accepter')">
+                                    <ng-container *ngIf="demande?.etat?.includes('COMPLETED')">
                                         <mat-icon
                                             class="icon-size-5 text-green-600"
                                             [svgIcon]="'heroicons_solid:check-badge'"
-                                            [matTooltip]="'accepter'"></mat-icon>
+                                            [matTooltip]="'COMPLETED'"></mat-icon>
                                     </ng-container>
 
 
-                                    <ng-container *ngIf="demande?.etat?.includes('coming')">
+                                    <ng-container *ngIf="demande?.etat?.includes('PENDING')">
                                         <mat-icon
                                             class="icon-size-5 text-blue-600"
                                             svgIcon="access_time_filled"
                                             [matTooltip]="'en cours de traitement'"></mat-icon>
                                     </ng-container>
 
-                                    <ng-container *ngIf="demande?.etat?.includes('rejeter')">
+                                    <ng-container *ngIf="demande?.etat?.includes('CANCELED')">
                                         <mat-icon
                                             class="icon-size-5 text-red-600"
                                             svgIcon="access_time_filled"
@@ -136,8 +136,8 @@
                                     <mat-icon>more_vert</mat-icon>
                                 </button>
                                 <mat-menu #menu="matMenu">
-                                    <button (click)="changeEtat('accepter', demande)" mat-menu-item>accepter</button>
-                                    <button (click)="changeEtat('rejeter', demande)" mat-menu-item>rejeter</button>
+                                    <button (click)="changeEtat('COMPLETED', demande)" mat-menu-item>accepter</button>
+                                    <button (click)="changeEtat('CANCELED', demande)" mat-menu-item>rejeter</button>
                                     <button (click)="supprimer(demande)" mat-menu-item>Supprimer</button>
                                 </mat-menu>
                             </div>

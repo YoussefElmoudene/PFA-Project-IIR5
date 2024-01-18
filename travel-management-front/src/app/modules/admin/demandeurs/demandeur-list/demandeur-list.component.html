@@ -59,7 +59,7 @@
                             <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu #menu="matMenu">
-                            <button mat-menu-item>Supprimer</button>
+                            <button (click)="supprimer(item)" mat-menu-item>Supprimer</button>
 
                             <button [routerLink]="'/admin/demandes/' + item?.email"
                                     mat-menu-item>Les demandes

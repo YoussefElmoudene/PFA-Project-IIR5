@@ -38,7 +38,7 @@ export class CreateDemandeComponent {
 
     save() {
         this.demande.demandeur = this.auth._user
-        this.demande.etat = 'coming'
+        this.demande.etat = 'PENDING'
         this.demandeService.save(this.demande)
             .subscribe(response => {
                 console.log(response)

@@ -39,6 +39,15 @@ export class DemandeService {
         return this.http.get<Demande[]>(this.url + `etat/${etat}`)
     }
 
+    public findByDemandeurAndEtat(etat, id): Observable<Demande[]> {
+        return this.http.get<Demande[]>(this.url + `filterByEtat`, {
+            params: {
+                etat: etat,
+                id: id
+            }
+        })
+    }
+
     public changeEtat(id, etat): Observable<Demande> {
         return this.http.get<Demande>(this.url + `changeEtat/${id}/${etat}`)
     }
