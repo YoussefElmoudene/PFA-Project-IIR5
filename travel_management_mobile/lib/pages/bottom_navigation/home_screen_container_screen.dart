@@ -57,7 +57,7 @@ class HomeContainerScreen extends StatelessWidget {
       case AppRoutes.operations:
         return BookingOngoingPage();
       case AppRoutes.profileScreen:
-        return ProfilePage();
+        return ProfileScreen();
       default:
         return DefaultWidget();
     }

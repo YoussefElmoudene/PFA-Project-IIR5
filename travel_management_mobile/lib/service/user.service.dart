@@ -44,7 +44,7 @@ class UserService {
           'Content-Type': 'application/json',
         };
         final response = await http.get(
-          Uri.parse('${ApiUrl.springUrl}/api/users/$userId'),
+          Uri.parse('${ApiUrl.springUrl}/users/$userId'),
           headers: headers,
         );
         if (response.statusCode == 200) {
@@ -70,7 +70,7 @@ class UserService {
       };
 
       final response = await http.get(
-        Uri.parse('${ApiUrl.springUrl}/api/user/'),
+        Uri.parse('${ApiUrl.springUrl}/users/'),
         headers: headers,
       );
 
@@ -96,7 +96,7 @@ class UserService {
       };
 
       final response = await http.get(
-        Uri.parse('${ApiUrl.springUrl}/api/user/$id'),
+        Uri.parse('${ApiUrl.springUrl}/users/$id'),
         headers: headers,
       );
 
@@ -121,7 +121,7 @@ class UserService {
       };
 
       final response = await http.post(
-        Uri.parse('${ApiUrl.springUrl}/api/user/save'),
+        Uri.parse('${ApiUrl.springUrl}/users/save'),
         headers: headers,
         body: json.encode(user.toJson()),
       );
@@ -147,7 +147,7 @@ class UserService {
       };
 
       final response = await http.delete(
-        Uri.parse('${ApiUrl.springUrl}/api/user/$id'),
+        Uri.parse('${ApiUrl.springUrl}/users/$id'),
         headers: headers,
       );
 
@@ -160,6 +160,46 @@ class UserService {
     }
   }
 
+  Future<UserModel?> updateProfile(String updatedFname, String updatedLname,String updatedPhone) async {
+    try {
+      final token = await StorageService().getToken();
+      final Map<String, dynamic>? decodedToken = await decodeToken();
+      final userId = decodedToken?['id'];
+      final headers = {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      };
+      final data = {
+        'firstName': updatedFname,
+        'lastName': updatedLname,
+        'tel': updatedPhone,
+      };
+
+      final response = await http.put(
+        Uri.parse('${ApiUrl.springUrl}/users/update/$userId'),
+        headers: headers,
+        body: json.encode(data),
+      );
+      print('Update Profile Response: ${response.body}');
+      print('Update Profile Status Code: ${response.statusCode}');
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        if (response.body.isNotEmpty) {
+          final Map<String, dynamic> updatedUserData = json.decode(response.body);
+          return UserModel.fromJson(updatedUserData);
+        } else {
+          return null;
+        }
+      } else {
+        throw Exception('Failed to update profile: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Update Profile Error: $e');
+      throw Exception('Error updating profile: $e');
+    }
+  }
+
+
   Future<UserModel> findUserByUsername(String username) async {
     try {
       final token = await StorageService().getToken();
@@ -169,7 +209,7 @@ class UserService {
       };
 
       final response = await http.get(
-        Uri.parse('${ApiUrl.springUrl}/api/user/username/$username'),
+        Uri.parse('${ApiUrl.springUrl}/users/username/$username'),
         headers: headers,
       );
 
@@ -194,7 +234,7 @@ class UserService {
       };
 
       final response = await http.get(
-        Uri.parse('${ApiUrl.springUrl}/api/user/email/$email'),
+        Uri.parse('${ApiUrl.springUrl}/users/email/$email'),
         headers: headers,
       );
 
@@ -219,7 +259,7 @@ class UserService {
       };
 
       final response = await http.get(
-        Uri.parse('${ApiUrl.springUrl}/api/user/role/$role'),
+        Uri.parse('${ApiUrl.springUrl}/users/role/$role'),
         headers: headers,
       );
 

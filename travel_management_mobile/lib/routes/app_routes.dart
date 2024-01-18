@@ -22,7 +22,7 @@ class AppRoutes {
     splashScreen: (context) => SplashPage(),
     loginScreen: (context) => LoginPage(),
     signUpScreen: (context) => SignUpPage(),
-    profileScreen: (context) => ProfilePage(),
+    profileScreen: (context) => ProfileScreen(),
     homeScreen: (context) => HomeContainerScreen(),
     operations: (context) => BookingOngoingPage(),
     home: (context) => HomePage(),

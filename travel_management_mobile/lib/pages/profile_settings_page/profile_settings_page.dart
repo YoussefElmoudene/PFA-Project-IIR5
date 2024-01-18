@@ -33,11 +33,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool isSelectedSwitch = false;
   late Future<UserModel> _userDataFuture;
 
+
   @override
   void initState() {
     super.initState();
+    init();
+
+  }
+
+
+  Future<void> init() async {
     _userDataFuture = UserService().getUserInfo();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -83,12 +91,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       SizedBox(height: 10.v),
                       // Text("${userData['firstName']} ${userData['lastName']}", style: theme.textTheme.headlineSmall),
-                      Text("${userData.firstName}",
-                          style: theme.textTheme.headlineSmall),
+                      Text("${userData.firstName}", style: theme.textTheme.headlineSmall),
                       SizedBox(height: 11.v),
-                      Text("${userData.lastName}",
-                          style: CustomTextStyles.titleSmallWhiteA700),
-                      SizedBox(height: 11.v),
+                      Text("${userData.lastName}", style: CustomTextStyles.titleSmallWhiteA700),
+                      SizedBox(height: 6.v),
+                      Text("${userData.email}", style: CustomTextStyles.titleSmallWhiteA700),
+                      SizedBox(height: 6.v),
                       Text("${userData.tel}",
                           style: CustomTextStyles.titleSmallWhiteA700),
                     ],
@@ -190,11 +198,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               width: 114.h,
               text: 'update',
               onPressed: () async {
-                await UserService().updateProfile(
+                 await UserService().updateProfile(
                   firstNameController.text,
                   lastNameController.text,
                   phoneController.text,
                 );
+                setState(() {
+                  init();
+                });
                 Navigator.pop(context);
               },
             ),

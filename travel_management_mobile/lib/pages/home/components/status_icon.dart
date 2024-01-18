@@ -8,9 +8,9 @@ class StatusIcons extends StatelessWidget {
   Color getButtonColor() {
     switch (status.toUpperCase()) {
       case 'PENDING':
-        return Colors.yellow;
+        return Colors.orange;
       case 'COMPLETED':
-        return Colors.green;
+        return Colors.teal;
       case 'CANCELED':
         return Colors.red;
       default:
@@ -21,12 +21,12 @@ class StatusIcons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(right: 8.0),
+      padding: EdgeInsets.only(left: 2.0),
       child: ElevatedButton(
         onPressed: () {},
         style: ElevatedButton.styleFrom(
           primary: getButtonColor(),
-          minimumSize: Size(90.0, 44.0),
+          minimumSize: Size(100.0, 44.0),
         ),
         child: Text(
           status.toUpperCase(),
